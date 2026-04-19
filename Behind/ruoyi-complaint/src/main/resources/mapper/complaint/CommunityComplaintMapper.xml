@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.complaint1.mapper.CommunityComplaintMapper">
+    
+    <resultMap type="CommunityComplaint" id="CommunityComplaintResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="complaintTitle"    column="complaint_title"    />
+        <result property="complaintContent"    column="complaint_content"    />
+        <result property="complaintType"    column="complaint_type"    />
+        <result property="complaintStatus"    column="complaint_status"    />
+        <result property="handleUserId"    column="handle_user_id"    />
+        <result property="handleUserName"    column="handle_user_name"    />
+        <result property="handleResult"    column="handle_result"    />
+        <result property="handleTime"    column="handle_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+
+
+    <select id="selectCommunityComplaintList" parameterType="CommunityComplaint" resultMap="CommunityComplaintResult">
+        SELECT id, user_id, user_name, user_phone, complaint_title, complaint_content, complaint_type, complaint_status, handle_user_id, handle_user_name, handle_result, handle_time, create_by, create_time, update_by, update_time, remark
+        FROM community_complaint
+        WHERE user_name LIKE CONCAT('%', #{userName}, '%')
+          AND user_phone = #{userPhone}
+          AND complaint_title LIKE CONCAT('%', #{complaintTitle}, '%')
+          AND complaint_content LIKE CONCAT('%', #{complaintContent}, '%')
+          AND complaint_type = #{complaintType}
+          AND complaint_status = #{complaintStatus}
+          AND handle_user_id = #{handleUserId}
+          AND handle_user_name LIKE CONCAT('%', #{handleUserName}, '%')
+          AND handle_result = #{handleResult}
+          AND handle_time = #{handleTime}
+    </select>
+    
+    <select id="selectCommunityComplaintById" parameterType="Long" resultMap="CommunityComplaintResult">
+        SELECT id, user_id, user_name, user_phone, complaint_title, complaint_content, complaint_type, complaint_status, handle_user_id, handle_user_name, handle_result, handle_time, create_by, create_time, update_by, update_time, remark
+        FROM community_complaint
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertCommunityComplaint" parameterType="CommunityComplaint" useGeneratedKeys="true" keyProperty="id">
+        insert into community_complaint (
+            user_id,
+            user_name,
+            user_phone,
+            complaint_title,
+            complaint_content,
+            complaint_type,
+            complaint_status,
+            handle_user_id,
+            handle_user_name,
+            handle_result,
+            handle_time,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            remark
+        ) values (
+                     #{userId},
+                     #{userName},
+                     #{userPhone},
+                     #{complaintTitle},
+                     #{complaintContent},
+                     #{complaintType},
+                     #{complaintStatus},
+                     #{handleUserId},
+                     #{handleUserName},
+                     #{handleResult},
+                     #{handleTime},
+                     #{createBy},
+                     #{createTime},
+                     #{updateBy},
+                     #{updateTime},
+                     #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityComplaint" parameterType="CommunityComplaint">
+        update community_complaint
+        set
+            user_id = #{userId},
+            user_name = #{userName},
+            user_phone = #{userPhone},
+            complaint_title = #{complaintTitle},
+            complaint_content = #{complaintContent},
+            complaint_type = #{complaintType},
+            complaint_status = #{complaintStatus},
+            handle_user_id = #{handleUserId},
+            handle_user_name = #{handleUserName},
+            handle_result = #{handleResult},
+            handle_time = #{handleTime},
+            create_by = #{createBy},
+            create_time = #{createTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime},
+            remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityComplaintById" parameterType="Long">
+        delete from community_complaint where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityComplaintByIds" parameterType="String">
+        delete from community_complaint where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

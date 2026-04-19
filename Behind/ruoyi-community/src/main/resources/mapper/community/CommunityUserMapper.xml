@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityUserMapper">
+    
+    <resultMap type="com.ruoyi.community.domain.CommunityUser" id="CommunityUserResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="gender"    column="gender"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="liveData"    column="live_data"    />
+        <result property="specificAddress"    column="specific_address"    />
+        <result property="emergencyContact"    column="emergency_contact"    />
+        <result property="emergencyPhone"    column="emergency_phone"    />
+        <result property="password"    column="password"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCommunityUserVo">
+        select id, name, phone, id_card, gender, birthday, live_data, specific_address, emergency_contact, emergency_phone, password, create_by, create_time, update_by, update_time, remark from community_user
+    </sql>
+
+    <select id="selectCommunityUserByPhone" parameterType="String" resultMap="CommunityUserResult">
+        <include refid="selectCommunityUserVo"/>
+        where phone = #{phone}
+    </select>
+
+    <select id="selectCommunityUserById" parameterType="Long" resultMap="CommunityUserResult">
+        <include refid="selectCommunityUserVo"/>
+        where id = #{id}
+    </select>
+
+    <update id="updateCommunityUser" parameterType="com.ruoyi.community.domain.CommunityUser">
+        UPDATE community_user
+        SET
+            name = COALESCE(#{name}, name),
+            id_card = COALESCE(#{idCard}, id_card),
+            gender = COALESCE(#{gender}, gender),
+            birthday = COALESCE(#{birthday}, birthday),
+            live_data = COALESCE(#{liveData}, live_data),
+            specific_address = COALESCE(#{specificAddress}, specific_address),
+            emergency_contact = COALESCE(#{emergencyContact}, emergency_contact),
+            emergency_phone = COALESCE(#{emergencyPhone}, emergency_phone),
+            password = COALESCE(#{password}, password),
+            update_by = COALESCE(#{updateBy}, update_by),
+            update_time = COALESCE(#{updateTime}, update_time),
+            remark = COALESCE(#{remark}, remark)
+        WHERE id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.TrackMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.domain.TrackEntity">
+        <id column="id" property="id" />
+        <result column="package_id" property="packageId" />
+        <result column="time" property="trackTime" />
+        <result column="description" property="description" />
+    </resultMap>
+
+    <select id="selectTracksByPackageId" resultMap="BaseResultMap">
+        SELECT * FROM package_track WHERE package_id = #{packageId} ORDER BY time DESC
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.domain.TrackEntity">
+        INSERT INTO package_track (package_id, time, description)
+        VALUES (#{packageId}, #{trackTime}, #{description})
+    </insert>
+
+</mapper>

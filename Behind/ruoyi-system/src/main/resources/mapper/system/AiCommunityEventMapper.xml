@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AiCommunityEventMapper">
+
+    <select id="selectList" parameterType="AiCommunityEvent" resultType="AiCommunityEvent">
+        select id,
+               event_title     as eventTitle,
+               event_content   as eventContent,
+               event_type      as eventType,
+               event_level     as eventLevel,
+               ai_suggest      as aiSuggest,
+               status
+        from ai_community_event
+        <where>
+            <if test="eventTitle != null">and event_title like concat('%',#{eventTitle},'%')</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+        order by id desc
+    </select>
+    <select id="selectById" resultType="com.ruoyi.system.domain.AiCommunityEvent"></select>
+
+    <insert id="insertAiCommunityEvent" parameterType="AiCommunityEvent">
+        insert into ai_community_event
+        (event_title,event_content,event_type,event_level,ai_suggest,status)
+        values
+            (#{eventTitle},#{eventContent},#{eventType},#{eventLevel},#{aiSuggest},#{status})
+    </insert>
+
+    <update id="updateAiCommunityEvent" parameterType="AiCommunityEvent">
+        update ai_community_event
+        <set>
+            <if test="status != null">status=#{status}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+</mapper>

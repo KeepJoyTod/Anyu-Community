@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.VenueMapper">
+    <!-- 表名映射 -->
+    <resultMap type="com.ruoyi.domain.Venue" id="VenueResult">
+        <id     property="id"          column="id"          />
+        <result property="name"        column="name"        />
+        <result property="icon"        column="icon"        />
+        <result property="desc"        column="description" />
+        <result property="price"       column="price"       />
+        <result property="createdAt"   column="created_at"  />
+        <result property="updatedAt"   column="updated_at"  />
+    </resultMap>
+
+    <!-- 查询所有场地 -->
+    <select id="selectList" resultMap="VenueResult">
+        select id, name, icon, description, price, created_at, updated_at
+        from venue
+    </select>
+
+</mapper>

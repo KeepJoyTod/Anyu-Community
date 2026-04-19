@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.NoticeMapper">
+    <!-- 分页查询通知 -->
+    <select id="selectPage" resultType="com.ruoyi.domain.Notice">
+        select * from community_notice
+        where status = '0'
+        order by is_top desc, publish_time desc
+        limit #{offset}, #{size}
+    </select>
+
+    <!-- 统计所有通知数量 -->
+    <select id="selectCountAll" resultType="long">
+        select count(*) from community_notice where status = '0'
+    </select>
+
+    <!-- 统计未读通知数量 -->
+    <select id="selectCountUnread" resultType="long">
+        select count(*) from community_notice where status = '0' and (read_count is null or read_count = 0)
+    </select>
+
+    <!-- 查询未读通知 -->
+    <select id="selectUnread" resultType="com.ruoyi.domain.Notice">
+        select * from community_notice where status = '0' and (read_count is null or read_count = 0)
+    </select>
+
+    <!-- 根据ID查询通知 -->
+    <select id="selectById" parameterType="java.lang.Long" resultType="com.ruoyi.domain.Notice">
+        select * from community_notice where id = #{id}
+    </select>
+
+    <!-- 更新通知 -->
+    <update id="updateById" parameterType="com.ruoyi.domain.Notice">
+        update community_notice
+        set notice_title = #{noticeTitle},
+            notice_content = #{noticeContent},
+            notice_type = #{noticeType},
+            read_count = #{readCount},
+            status = #{status},
+            is_top = #{topFlag},
+            publish_time = #{publishTime},
+            publish_user_id = #{publishUserId},
+            publish_user_name = #{publishUserName},
+            create_by = #{createBy},
+            create_time = #{createTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime},
+            remark = #{remark},
+            more_info = #{moreInfo}
+        where id = #{id}
+    </update>
+</mapper>

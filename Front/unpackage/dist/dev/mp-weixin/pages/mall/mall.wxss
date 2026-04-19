@@ -1,0 +1,180 @@
+
+.mall-container.data-v-2e142186 {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+/* 积分信息 */
+.points-info.data-v-2e142186 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 40rpx;
+  color: white;
+}
+.points-card.data-v-2e142186 {
+  text-align: center;
+}
+.points-label.data-v-2e142186 {
+  font-size: 28rpx;
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 10rpx;
+}
+.points-value.data-v-2e142186 {
+  font-size: 60rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+}
+.points-total.data-v-2e142186 {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+/* 导航标签 */
+.nav-tabs.data-v-2e142186 {
+  display: flex;
+  background-color: white;
+  border-bottom: 1rpx solid #e5e5e5;
+  margin-bottom: 20rpx;
+}
+.nav-tab.data-v-2e142186 {
+  flex: 1;
+  padding: 30rpx 0;
+  text-align: center;
+  font-size: 30rpx;
+  color: #666;
+  position: relative;
+}
+.nav-tab.active.data-v-2e142186 {
+  color: #667eea;
+  font-weight: bold;
+}
+.nav-tab.active.data-v-2e142186::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  width: 50%;
+  height: 4rpx;
+  background-color: #667eea;
+}
+
+/* 内容区域 */
+.content-area.data-v-2e142186 {
+  padding: 0 20rpx;
+}
+.section-title.data-v-2e142186 {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin: 30rpx 0;
+  color: #333;
+}
+.loading.data-v-2e142186, .empty.data-v-2e142186 {
+  text-align: center;
+  padding: 100rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 积分兑换选项 */
+.exchange-options.data-v-2e142186 {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+.exchange-option.data-v-2e142186 {
+  background-color: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+.option-icon.data-v-2e142186 {
+  font-size: 80rpx;
+  margin-right: 30rpx;
+  width: 120rpx;
+  height: 120rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20rpx;
+}
+.option-icon.electricity.data-v-2e142186 {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+.option-icon.water.data-v-2e142186 {
+  background-color: #e1f5fe;
+  color: #0288d1;
+}
+.option-info.data-v-2e142186 {
+  flex: 1;
+}
+.option-title.data-v-2e142186 {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 10rpx;
+}
+.option-desc.data-v-2e142186 {
+  font-size: 24rpx;
+  color: #666;
+  display: block;
+}
+.option-actions.data-v-2e142186 {
+  text-align: right;
+}
+.exchange-btn.data-v-2e142186 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 10rpx;
+  padding: 15rpx 40rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+.exchange-btn.data-v-2e142186:disabled {
+  background: #ccc;
+  color: #fff;
+}
+
+/* 记录列表 */
+.records-list.data-v-2e142186 {
+  background-color: white;
+  border-radius: 20rpx;
+  overflow: hidden;
+  margin-bottom: 20rpx;
+}
+.record-item.data-v-2e142186 {
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.record-item.data-v-2e142186:last-child {
+  border-bottom: none;
+}
+.record-info.data-v-2e142186 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.record-type.data-v-2e142186 {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: bold;
+}
+.record-amount.data-v-2e142186 {
+  font-size: 32rpx;
+  color: #4ecdc4;
+  font-weight: bold;
+}
+.record-details.data-v-2e142186 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #666;
+}
+

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.CommunityWaterFeeMapper">
+    <select id="selectCommunityWaterFeeById" resultType="com.ruoyi.domain.CommunityWaterFee">
+        select water_id as waterId, user_id as userId, user_name as userName,
+               user_room as userRoom, read_month as readMonth,
+               last_reading as lastReading, current_reading as currentReading,
+               surplus_water as surplusWater, used_amount as usedAmount,
+               unit_price as unitPrice, total_fee as totalFee, balance,
+               fee_status as feeStatus, due_date as dueDate,
+               payment_time as paymentTime, payment_no as paymentNo,
+               overdue_amount as overdueAmount, create_time as createTime, update_time as updateTime
+        from community_water_fee 
+        where water_id = #{waterId}
+    </select>
+    
+    <select id="selectCommunityWaterFeeByUserId" resultType="com.ruoyi.domain.CommunityWaterFee">
+        select water_id as waterId, user_id as userId, user_name as userName,
+               user_room as userRoom, read_month as readMonth,
+               last_reading as lastReading, current_reading as currentReading,
+               surplus_water as surplusWater, used_amount as usedAmount,
+               unit_price as unitPrice, total_fee as totalFee, balance,
+               fee_status as feeStatus, due_date as dueDate,
+               payment_time as paymentTime, payment_no as paymentNo,
+               overdue_amount as overdueAmount, create_time as createTime, update_time as updateTime
+        from community_water_fee 
+        where user_id = 1 
+        order by create_time desc
+    </select>
+    
+    <select id="selectCommunityWaterFeeList" resultType="com.ruoyi.domain.CommunityWaterFee">
+        select water_id as waterId, user_id as userId, user_name as userName,
+               user_room as userRoom, read_month as readMonth,
+               last_reading as lastReading, current_reading as currentReading,
+               surplus_water as surplusWater, used_amount as usedAmount,
+               unit_price as unitPrice, total_fee as totalFee, balance,
+               fee_status as feeStatus, due_date as dueDate,
+               payment_time as paymentTime, payment_no as paymentNo,
+               overdue_amount as overdueAmount, create_time as createTime, update_time as updateTime
+        from community_water_fee
+    </select>
+    
+    <update id="updateCommunityWaterFee" parameterType="com.ruoyi.domain.CommunityWaterFee">
+        update community_water_fee
+        set user_id = #{userId},
+            user_name = #{userName},
+            user_room = #{userRoom},
+            read_month = #{readMonth},
+            last_reading = #{lastReading},
+            current_reading = #{currentReading},
+            surplus_water = #{surplusWater},
+            used_amount = #{usedAmount},
+            unit_price = #{unitPrice},
+            total_fee = #{totalFee},
+            balance = #{balance},
+            fee_status = #{feeStatus},
+            due_date = #{dueDate},
+            payment_time = #{paymentTime},
+            payment_no = #{paymentNo},
+            overdue_amount = #{overdueAmount},
+            reader = #{reader},
+            read_time = #{readTime},
+            create_time = #{createTime},
+            update_time = #{updateTime},
+            remark = #{remark}
+        where water_id = #{waterId}
+    </update>
+    
+    <insert id="insertCommunityWaterFee" parameterType="com.ruoyi.domain.CommunityWaterFee">
+        insert into community_water_fee (user_id, user_name, user_room, read_month, last_reading, current_reading, 
+                                        surplus_water, used_amount, unit_price, total_fee, balance, fee_status, 
+                                        due_date, payment_time, payment_no, overdue_amount, reader, read_time, 
+                                        create_time, update_time, remark)
+        values (#{userId}, #{userName}, #{userRoom}, #{readMonth}, #{lastReading}, #{currentReading}, 
+                #{surplusWater}, #{usedAmount}, #{unitPrice}, #{totalFee}, #{balance}, #{feeStatus}, 
+                #{dueDate}, #{paymentTime}, #{paymentNo}, #{overdueAmount}, #{reader}, #{readTime}, 
+                #{createTime}, #{updateTime}, #{remark})
+    </insert>
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.VisitorInviteMapper">
+
+    <!-- 结果集映射：严格匹配community_visitor表结构 -->
+    <resultMap type="com.ruoyi.domain.VisitorInvite" id="VisitorInviteResult">
+        <result property="id" column="id"/>
+        <result property="ownerId" column="owner_id"/>
+        <result property="ownerName" column="owner_name"/>
+        <result property="visitorName" column="visitor_name"/>
+        <result property="visitorPhone" column="visitor_phone"/>
+        <result property="visitorIdCard" column="visitor_id_card"/>
+        <result property="visitReason" column="visit_reason"/>
+        <result property="expectedVisitTime" column="expected_visit_time"/>
+        <result property="actualVisitTime" column="actual_visit_time"/>
+        <result property="leaveTime" column="leave_time"/>
+        <result property="status" column="status"/>
+        <result property="inviteCode" column="invite_code"/>
+        <result property="communityId" column="community_id"/>
+        <!-- 核心修正：表字段是 building，不是 building_id -->
+        <result property="buildingId" column="building"/>
+        <result property="unit" column="unit"/>
+        <result property="room" column="room"/>
+        <!-- 继承BaseEntity的公共字段 -->
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!-- 根据ID查询访客邀请 -->
+    <select id="selectById" parameterType="java.lang.Long" resultMap="VisitorInviteResult">
+        select
+            id, owner_id, owner_name, visitor_name, visitor_phone, visitor_id_card,
+            visit_reason, expected_visit_time, actual_visit_time, leave_time,
+            case status
+                when '0' then '待签入'
+                when '1' then '已签入'
+                when '2' then '已离开'
+                when '3' then '已取消'
+                end as status,
+            invite_code, community_id, building, unit, room,
+            create_by, create_time, update_by, update_time, remark
+        from community_visitor
+        where id = #{id}
+    </select>
+
+    <!-- 查询最近的访客邀请列表 -->
+    <select id="selectRecentVisitorInvite" resultMap="VisitorInviteResult">
+        select
+            id, owner_id, owner_name, visitor_name, visitor_phone, visitor_id_card,
+            visit_reason, expected_visit_time, actual_visit_time, leave_time,
+            case status
+                when '0' then '待签入'
+                when '1' then '已签入'
+                when '2' then '已离开'
+                when '3' then '已取消'
+                end as status,
+            invite_code, community_id, building, unit, room,
+            create_by, create_time, update_by, update_time, remark
+        from community_visitor
+        order by create_time desc
+        limit #{limit}
+    </select>
+
+    <!-- 访客签入更新状态 -->
+    <update id="updateVisitorSignInStatus" parameterType="Long">
+        update community_visitor
+        set status = '1', actual_visit_time = now(), update_time = now()
+        where id = #{id} and status = '0'
+    </update>
+
+    <!-- 新增访客邀请 -->
+    <insert id="insert" parameterType="com.ruoyi.domain.VisitorInvite">
+        insert into community_visitor (
+            owner_id, owner_name, visitor_name, visitor_phone, visitor_id_card,
+            visit_reason, expected_visit_time, status, invite_code, community_id,
+            building, unit, room, create_by, create_time, update_by, update_time, remark
+        ) values (
+            #{ownerId}, #{ownerName}, #{visitorName}, #{visitorPhone}, #{visitorIdCard},
+            #{visitReason}, #{expectedVisitTime}, #{status}, #{inviteCode}, #{communityId},
+            #{buildingId}, #{unit}, #{room}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{remark}
+        )
+    </insert>
+
+</mapper>

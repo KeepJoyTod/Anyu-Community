@@ -1,0 +1,22 @@
+package com.ruoyi.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.domain.CommunityMedal;
+import org.apache.ibatis.annotations.Mapper;
+import org.mybatis.spring.annotation.MapperScan;
+
+import java.util.List;
+
+/**
+ * <p>
+ * 勋章表 Mapper 接口
+ * </p>
+ *
+ * @author ruirui
+ * @since 2026-03-25
+ */
+@Mapper
+public interface CommunityMedalMapper extends BaseMapper<CommunityMedal> {
+
+    Integer getMyHallByName(String username);
+}

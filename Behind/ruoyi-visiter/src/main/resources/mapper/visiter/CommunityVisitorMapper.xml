@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.visiter.mapper.CommunityVisitorMapper">
+    
+    <resultMap type="CommunityVisitor" id="CommunityVisitorResult">
+        <result property="id"    column="id"    />
+        <result property="visitorName"    column="visitor_name"    />
+        <result property="visitorIdCard"    column="visitor_id_card"    />
+        <result property="visitorPhone"    column="visitor_phone"    />
+        <result property="visitUserId"    column="visit_user_id"    />
+        <result property="visitUserName"    column="visit_user_name"    />
+        <result property="visitUserRoom"    column="visit_user_room"    />
+        <result property="visitType"    column="visit_type"    />
+        <result property="checkInTime"    column="check_in_time"    />
+        <result property="checkOutTime"    column="check_out_time"    />
+        <result property="visitorStatus"    column="visitor_status"    />
+        <result property="gateOperator"    column="gate_operator"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCommunityVisitorVo">
+        select id, visitor_name, visitor_id_card, visitor_phone, visit_user_id, visit_user_name, visit_user_room, visit_type, check_in_time, check_out_time, visitor_status, gate_operator, create_by, create_time, update_by, update_time, remark from community_visitor
+    </sql>
+
+    <select id="selectCommunityVisitorList" parameterType="CommunityVisitor" resultMap="CommunityVisitorResult">
+        SELECT id, visitor_name, visitor_id_card, visitor_phone, visit_user_id, visit_user_name, visit_user_room, visit_type, check_in_time, check_out_time, visitor_status, gate_operator, create_by, create_time, update_by, update_time, remark
+        FROM community_visitor
+        WHERE visitor_name LIKE CONCAT('%', #{visitorName}, '%')
+          AND visitor_id_card = #{visitorIdCard}
+          AND visitor_phone = #{visitorPhone}
+          AND visit_user_id = #{visitUserId}
+          AND visit_user_name LIKE CONCAT('%', #{visitUserName}, '%')
+          AND visit_user_room = #{visitUserRoom}
+          AND visit_type = #{visitType}
+          AND check_in_time = #{checkInTime}
+          AND check_out_time = #{checkOutTime}
+          AND visitor_status = #{visitorStatus}
+          AND gate_operator = #{gateOperator}
+    </select>
+    
+    <select id="selectCommunityVisitorById" parameterType="Long" resultMap="CommunityVisitorResult">
+        SELECT id, visitor_name, visitor_id_card, visitor_phone, visit_user_id, visit_user_name, visit_user_room, visit_type, check_in_time, check_out_time, visitor_status, gate_operator, create_by, create_time, update_by, update_time, remark
+        FROM community_visitor
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertCommunityVisitor" parameterType="CommunityVisitor" useGeneratedKeys="true" keyProperty="id">
+        insert into community_visitor (
+            visitor_name,
+            visitor_id_card,
+            visitor_phone,
+            visit_user_id,
+            visit_user_name,
+            visit_user_room,
+            visit_type,
+            check_in_time,
+            check_out_time,
+            visitor_status,
+            gate_operator,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            remark
+        ) values (
+                     #{visitorName},
+                     #{visitorIdCard},
+                     #{visitorPhone},
+                     #{visitUserId},
+                     #{visitUserName},
+                     #{visitUserRoom},
+                     #{visitType},
+                     #{checkInTime},
+                     #{checkOutTime},
+                     #{visitorStatus},
+                     #{gateOperator},
+                     #{createBy},
+                     #{createTime},
+                     #{updateBy},
+                     #{updateTime},
+                     #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityVisitor" parameterType="CommunityVisitor">
+        update community_visitor
+        set
+            visitor_name = #{visitorName},
+            visitor_id_card = #{visitorIdCard},
+            visitor_phone = #{visitorPhone},
+            visit_user_id = #{visitUserId},
+            visit_user_name = #{visitUserName},
+            visit_user_room = #{visitUserRoom},
+            visit_type = #{visitType},
+            check_in_time = #{checkInTime},
+            check_out_time = #{checkOutTime},
+            visitor_status = #{visitorStatus},
+            gate_operator = #{gateOperator},
+            create_by = #{createBy},
+            create_time = #{createTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime},
+            remark = #{remark}
+        where id = #{id}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityVisitorById" parameterType="Long">
+        delete from community_visitor where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityVisitorByIds" parameterType="String">
+        delete from community_visitor where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

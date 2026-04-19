@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.notice.mapper.CommunityyNoticeReadMapper">
+    
+    <resultMap type="com.ruoyi.notice.domain.CommunityyNoticeRead" id="CommunityNoticeReadResult">
+        <result property="id"    column="id"    />
+        <result property="noticeId"    column="notice_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="readTime"    column="read_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+<!--    <sql id="selectCommunityNoticeReadVo">-->
+<!--        select id, notice_id, user_id, read_time, create_by, create_time, update_by, update_time, remark from community_notice_read-->
+<!--    </sql>-->
+
+    <select id="selectCommunityNoticeReadList" parameterType="com.ruoyi.notice.domain.CommunityyNoticeRead" resultMap="CommunityNoticeReadResult">
+        SELECT id, notice_id, user_id, read_time, create_by, create_time, update_by, update_time, remark
+        FROM community_notice_read
+        WHERE
+            (#{noticeId} IS NULL OR notice_id = #{noticeId})
+          AND (#{userId} IS NULL OR user_id = #{userId})
+          AND (#{readTime} IS NULL OR DATE(read_time) = DATE(#{readTime}))
+    </select>
+    
+    <select id="selectCommunityNoticeReadById" parameterType="Long" resultMap="CommunityNoticeReadResult">
+        SELECT id, notice_id, user_id, read_time, create_by, create_time, update_by, update_time, remark
+        FROM community_notice_read WHERE id = #{id}
+    </select>
+
+    <insert id="insertCommunityNoticeRead" parameterType="com.ruoyi.notice.domain.CommunityyNoticeRead" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO community_notice_read (
+            notice_id,
+            user_id,
+            read_time,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            remark
+        ) VALUES (
+                     #{noticeId},
+                     #{userId},
+                     #{readTime},
+                     #{createBy},
+                     #{createTime},
+                     #{updateBy},
+                     #{updateTime},
+                     #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityNoticeRead" parameterType="com.ruoyi.notice.domain.CommunityyNoticeRead">
+        UPDATE community_notice_read
+        SET
+            notice_id = #{noticeId},
+            user_id = #{userId},
+            read_time = #{readTime},
+            create_by = #{createBy},
+            create_time = #{createTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime},
+            remark = #{remark}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteCommunityNoticeReadById" parameterType="Long">
+        delete from community_notice_read where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityNoticeReadByIds" parameterType="String">
+        DELETE FROM community_notice_read WHERE id IN (${ids})
+    </delete>
+</mapper>

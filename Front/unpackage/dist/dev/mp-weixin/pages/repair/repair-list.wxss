@@ -1,0 +1,97 @@
+
+.repair-page.data-v-020024d6 {
+	background-color: #f5f7fa;
+	min-height: 100vh;
+}
+
+/* 标签栏 */
+.tab-bar.data-v-020024d6 {
+	display: flex;
+	background-color: #fff;
+	margin-bottom: 20rpx;
+}
+.tab-item.data-v-020024d6 {
+	flex: 1;
+	text-align: center;
+	padding: 30rpx 0;
+	font-size: 30rpx;
+	color: #666;
+	position: relative;
+}
+.tab-item.active.data-v-020024d6 {
+	color: #1890ff;
+	font-weight: bold;
+}
+.tab-item.active.data-v-020024d6::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	        transform: translateX(-50%);
+	width: 80rpx;
+	height: 4rpx;
+	background-color: #1890ff;
+}
+
+/* 表格容器 */
+.table-box.data-v-020024d6 {
+	background-color: #fff;
+	margin: 0 20rpx;
+	border-radius: 16rpx;
+	overflow: hidden;
+}
+.empty-tip.data-v-020024d6 {
+	text-align: center;
+	padding: 100rpx 0;
+	color: #999;
+	font-size: 28rpx;
+}
+
+/* 表格行 */
+.table-row.data-v-020024d6 {
+	display: flex;
+	padding: 30rpx;
+	border-bottom: 1rpx solid #f0f0f0;
+	align-items: center;
+}
+.table-row.data-v-020024d6:last-child {
+	border-bottom: none;
+}
+.table-cell.data-v-020024d6 {
+	font-size: 28rpx;
+}
+.table-title.data-v-020024d6 {
+	flex: 3;
+	color: #333;
+}
+.table-time.data-v-020024d6 {
+	flex: 2;
+	color: #999;
+	font-size: 24rpx;
+	text-align: center;
+}
+.table-status.data-v-020024d6 {
+	flex: 1;
+	text-align: right;
+}
+
+/* 状态标签 */
+.status-tag.data-v-020024d6 {
+	padding: 6rpx 12rpx;
+	border-radius: 20rpx;
+	font-size: 24rpx;
+}
+.status-tag.untreated.data-v-020024d6 {
+	background-color: #fff2e8;
+	color: #fa8c16;
+}
+.status-tag.processing.data-v-020024d6 {
+	background-color: #e6f7ff;
+	color: #1890ff;
+}
+.status-tag.finished.data-v-020024d6 {
+	background-color: #f6ffed;
+	color: #52c41a;
+}
+

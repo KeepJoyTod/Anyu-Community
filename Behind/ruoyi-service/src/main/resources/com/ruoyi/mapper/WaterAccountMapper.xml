@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.WaterAccountMapper">
+
+
+    <select id="selectWaterAccountById" resultType="com.ruoyi.domain.WaterAccount">
+        select * from water_account where user_id = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.domain.WaterAccount" useGeneratedKeys="true" keyProperty="id">
+        insert into water_account (user_id, balance, water_amount, create_time, update_time)
+        values (#{userId}, #{balance}, #{waterAmount}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="updateById" parameterType="com.ruoyi.domain.WaterAccount">
+        update water_account
+        <set>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="balance != null">balance = #{balance},</if>
+            <if test="waterAmount != null">water_amount = #{waterAmount},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

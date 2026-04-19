@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityVisitorMapper">
+    
+    <resultMap type="com.ruoyi.community.domain.CommunityVisitor" id="CommunityVisitorResult">
+        <result property="id"    column="id"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="visitorName"    column="visitor_name"    />
+        <result property="visitorPhone"    column="visitor_phone"    />
+        <result property="visitorIdCard"    column="visitor_id_card"    />
+        <result property="visitReason"    column="visit_reason"    />
+        <result property="expectedVisitTime"    column="expected_visit_time"    />
+        <result property="actualVisitTime"    column="actual_visit_time"    />
+        <result property="leaveTime"    column="leave_time"    />
+        <result property="status"    column="status"    />
+        <result property="inviteCode"    column="invite_code"    />
+        <result property="communityId"    column="community_id"    />
+        <result property="building"    column="building"    />
+        <result property="unit"    column="unit"    />
+        <result property="room"    column="room"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+<!--    <sql id="selectCommunityVisitorVo">-->
+<!--        select id, owner_id, owner_name, visitor_name, visitor_phone, visitor_id_card, visit_reason, expected_visit_time, actual_visit_time, leave_time, status, invite_code, community_id, building, unit, room, create_by, create_time, update_by, update_time, remark from community_visitor-->
+<!--    </sql>-->
+
+    <select id="selectCommunityVisitorList" parameterType="com.ruoyi.community.domain.CommunityVisitor" resultMap="CommunityVisitorResult">
+        select id, owner_id, owner_name, visitor_name, visitor_phone,
+               visit_time, leave_time, status, community_id,
+               building, unit, room, create_time, update_time, remark
+        from community_visitor
+        where owner_id = #{ownerId}
+          and owner_name like concat('%', #{ownerName}, '%')
+          and visitor_name like concat('%', #{visitorName}, '%')
+          and visitor_phone = #{visitorPhone}
+          and status = #{status}
+          and community_id = #{communityId}
+          and building = #{building}
+          and unit = #{unit}
+          and room = #{room}
+        order by create_time desc
+    </select>
+    
+    <select id="selectCommunityVisitorById" parameterType="Long" resultMap="CommunityVisitorResult">
+        select id, owner_id, owner_name, visitor_name, visitor_phone,
+               visit_time, leave_time, status, community_id,
+               building, unit, room, create_time, update_time, remark
+        from community_visitor
+        where id = #{id}
+    </select>
+
+    <insert id="insertCommunityVisitor" parameterType="com.ruoyi.community.domain.CommunityVisitor" useGeneratedKeys="true" keyProperty="id">
+        insert into community_visitor (
+            owner_id, owner_name, visitor_name, visitor_phone, visitor_id_card,
+            visit_reason, expected_visit_time, actual_visit_time, leave_time, status,
+            invite_code, community_id, building, unit, room,
+            create_by, create_time, update_by, update_time, remark
+        ) values (
+                     #{ownerId}, #{ownerName}, #{visitorName}, #{visitorPhone}, #{visitorIdCard},
+                     #{visitReason}, #{expectedVisitTime}, #{actualVisitTime}, #{leaveTime}, #{status},
+                     #{inviteCode}, #{communityId}, #{building}, #{unit}, #{room},
+                     #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityVisitor" parameterType="com.ruoyi.community.domain.CommunityVisitor">
+        update community_visitor set
+                                     owner_id = #{ownerId},
+                                     owner_name = #{ownerName},
+                                     visitor_name = #{visitorName},
+                                     visitor_phone = #{visitorPhone},
+                                     visitor_id_card = #{visitorIdCard},
+                                     visit_reason = #{visitReason},
+                                     expected_visit_time = #{expectedVisitTime},
+                                     actual_visit_time = #{actualVisitTime},
+                                     leave_time = #{leaveTime},
+                                     status = #{status},
+                                     invite_code = #{inviteCode},
+                                     community_id = #{communityId},
+                                     building = #{building},
+                                     unit = #{unit},
+                                     room = #{room},
+                                     create_by = #{createBy},
+                                     create_time = #{createTime},
+                                     update_by = #{updateBy},
+                                     update_time = #{updateTime},
+                                     remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityVisitorById" parameterType="Long">
+        delete from community_visitor where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityVisitorByIds" parameterType="String">
+        DELETE FROM community_visitor WHERE id IN (${ids})
+    </delete>
+
+</mapper>

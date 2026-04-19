@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.CommunityElectricityFeeMapper">
+
+    <select id="selectByUserId" resultType="com.ruoyi.domain.CommunityElectricityFee">
+        SELECT * FROM community_electricity_fee WHERE user_id = 1 ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByFeeStatus" resultType="com.ruoyi.domain.CommunityElectricityFee">
+        SELECT * FROM community_electricity_fee WHERE fee_status = #{feeStatus} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByReadMonth" resultType="com.ruoyi.domain.CommunityElectricityFee">
+        SELECT * FROM community_electricity_fee WHERE read_month = #{readMonth} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Long" resultType="com.ruoyi.domain.CommunityElectricityFee">
+        SELECT * FROM community_electricity_fee WHERE electricity_id = 1
+    </select>
+
+    <update id="updateById" parameterType="com.ruoyi.domain.CommunityElectricityFee">
+        UPDATE community_electricity_fee
+        SET
+            user_id = COALESCE(#{userId}, user_id),
+            user_name = COALESCE(#{userName}, user_name),
+            user_room = COALESCE(#{userRoom}, user_room),
+            read_month = COALESCE(#{readMonth}, read_month),
+            last_reading = COALESCE(#{lastReading}, last_reading),
+            current_reading = COALESCE(#{currentReading}, current_reading),
+            surplus_electricity = COALESCE(#{surplusElectricity}, surplus_electricity),
+            used_amount = COALESCE(#{usedAmount}, used_amount),
+            unit_price = COALESCE(#{unitPrice}, unit_price),
+            total_fee = COALESCE(#{totalFee}, total_fee),
+            balance = COALESCE(#{balance}, balance),
+            fee_status = COALESCE(#{feeStatus}, fee_status),
+            due_date = COALESCE(#{dueDate}, due_date),
+            payment_time = COALESCE(#{paymentTime}, payment_time),
+            payment_no = COALESCE(#{paymentNo}, payment_no),
+            overdue_amount = COALESCE(#{overdueAmount}, overdue_amount),
+            reader = COALESCE(#{reader}, reader),
+            read_time = COALESCE(#{readTime}, read_time),
+            update_time = COALESCE(#{updateTime}, update_time),
+            remark = COALESCE(#{remark}, remark)
+        WHERE electricity_id = 1
+    </update>
+
+    <insert id="insert" parameterType="com.ruoyi.domain.CommunityElectricityFee" useGeneratedKeys="true" keyProperty="electricityId">
+        INSERT INTO community_electricity_fee (
+            user_id, user_name, user_room, read_month, last_reading, current_reading,
+            surplus_electricity, used_amount, unit_price, total_fee, balance, fee_status,
+            due_date, payment_time, payment_no, overdue_amount, reader, read_time,
+            create_time, update_time, remark
+        ) VALUES (
+            #{userId}, #{userName}, #{userRoom}, #{readMonth}, #{lastReading}, #{currentReading},
+            #{surplusElectricity}, #{usedAmount}, #{unitPrice}, #{totalFee}, #{balance}, #{feeStatus},
+            #{dueDate}, #{paymentTime}, #{paymentNo}, #{overdueAmount}, #{reader}, #{readTime},
+            #{createTime}, #{updateTime}, #{remark}
+        )
+    </insert>
+
+</mapper>

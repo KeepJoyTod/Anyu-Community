@@ -1,0 +1,405 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 这里的样式保持原样，我只加了一个按钮禁用态的样式 */
+.recharge-page.data-v-e6eb7748 {
+	position: relative;
+	min-height: 100vh;
+	background: #f6f9fc;
+	padding: 0 32rpx 60rpx;
+	overflow-x: hidden;
+}
+.bg-blur.data-v-e6eb7748 {
+	position: fixed;
+	top: -20%;
+	right: -20%;
+	width: 140%;
+	height: 140%;
+	background: radial-gradient(circle at 80% 20%, rgba(107, 140, 66, 0.08) 0%, rgba(107, 140, 66, 0.02) 60%, transparent 90%);
+	pointer-events: none;
+	z-index: 0;
+}
+/* 顶部导航栏 */
+.nav-bar.data-v-e6eb7748 {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 30rpx 0 20rpx;
+	position: relative;
+	z-index: 2;
+}
+.back-btn.data-v-e6eb7748 {
+	width: 72rpx;
+	height: 72rpx;
+	background: rgba(255,255,255,0.8);
+	-webkit-backdrop-filter: blur(12rpx);
+	        backdrop-filter: blur(12rpx);
+	border-radius: 36rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
+.back-icon.data-v-e6eb7748 {
+	font-size: 48rpx;
+	color: #3c5a3e;
+	font-weight: 500;
+}
+.nav-title.data-v-e6eb7748 {
+	font-size: 36rpx;
+	font-weight: 600;
+	color: #1f3b2c;
+	letter-spacing: 1rpx;
+}
+.placeholder.data-v-e6eb7748 {
+	width: 72rpx;
+}
+/* 余额卡片 */
+.balance-card.data-v-e6eb7748 {
+	background: rgba(255,255,255,0.92);
+	-webkit-backdrop-filter: blur(12rpx);
+	        backdrop-filter: blur(12rpx);
+	border-radius: 44rpx;
+	padding: 40rpx 32rpx;
+	margin-top: 20rpx;
+	margin-bottom: 48rpx;
+	box-shadow: 0 20rpx 40rpx -16rpx rgba(0,0,0,0.08), 0 0 0 1rpx rgba(107,140,66,0.1);
+	text-align: center;
+}
+.balance-label.data-v-e6eb7748 {
+	font-size: 28rpx;
+	color: #7c8f9e;
+	margin-bottom: 16rpx;
+}
+.balance-value.data-v-e6eb7748 {
+	font-size: 72rpx;
+	font-weight: 800;
+	color: #2b6e3f;
+	letter-spacing: -1rpx;
+}
+.unit.data-v-e6eb7748 {
+	font-size: 32rpx;
+	font-weight: 500;
+	color: #8b9bae;
+}
+.balance-tip.data-v-e6eb7748 {
+	font-size: 26rpx;
+	color: #8b9bae;
+	margin-top: 16rpx;
+}
+/* 通用区域样式 */
+.section-title.data-v-e6eb7748 {
+	font-size: 32rpx;
+	font-weight: 600;
+	color: #1f2e3a;
+	margin-bottom: 24rpx;
+}
+/* 金额输入 */
+.input-section.data-v-e6eb7748 {
+	margin-bottom: 48rpx;
+}
+.amount-input-wrapper.data-v-e6eb7748 {
+	background: rgba(255,255,255,0.9);
+	-webkit-backdrop-filter: blur(8rpx);
+	        backdrop-filter: blur(8rpx);
+	padding: 20rpx 32rpx;
+	display: flex;
+	align-items: center;
+	box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.02), 0 0 0 1rpx rgba(107,140,66,0.1);
+}
+.currency.data-v-e6eb7748 {
+	font-size: 48rpx;
+	font-weight: 600;
+	color: #6b8c42;
+	margin-right: 16rpx;
+}
+.amount-input.data-v-e6eb7748 {
+	flex: 1;
+	font-size: 44rpx;
+	font-weight: 500;
+	color: #1c2e3a;
+}
+.input-placeholder.data-v-e6eb7748 {
+	color: #bdc7d0;
+	font-size: 36rpx;
+}
+/* 快捷金额选项 */
+.quick-section.data-v-e6eb7748 {
+	margin-bottom: 48rpx;
+}
+.quick-options.data-v-e6eb7748 {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20rpx;
+}
+.quick-item.data-v-e6eb7748 {
+	background: rgba(255,255,255,0.8);
+	-webkit-backdrop-filter: blur(8rpx);
+	        backdrop-filter: blur(8rpx);
+	padding: 18rpx 32rpx;
+	border-radius: 60rpx;
+	font-size: 30rpx;
+	font-weight: 500;
+	color: #3c5a3e;
+	transition: all 0.2s;
+	box-shadow: 0 2rpx 6rpx rgba(0,0,0,0.02), 0 0 0 1rpx rgba(107,140,66,0.08);
+}
+.quick-item.active.data-v-e6eb7748 {
+	background: linear-gradient(105deg, #6b8c42, #528a34);
+	color: white;
+	box-shadow: 0 6rpx 14rpx rgba(107,140,66,0.3);
+}
+/* 支付方式 */
+.payment-section.data-v-e6eb7748 {
+	margin-bottom: 60rpx;
+}
+.payment-options.data-v-e6eb7748 {
+	display: flex;
+	gap: 24rpx;
+}
+.payment-item.data-v-e6eb7748 {
+	flex: 1;
+	background: rgba(255,255,255,0.85);
+	-webkit-backdrop-filter: blur(8rpx);
+	        backdrop-filter: blur(8rpx);
+	border-radius: 32rpx;
+	padding: 24rpx 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12rpx;
+	transition: all 0.2s;
+	box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.02), 0 0 0 1rpx rgba(107,140,66,0.08);
+}
+.payment-item.active.data-v-e6eb7748 {
+	background: rgba(107,140,66,0.12);
+	border: 1rpx solid #6b8c42;
+	box-shadow: 0 8rpx 20rpx rgba(107,140,66,0.15);
+}
+.pay-icon.data-v-e6eb7748 {
+	font-size: 56rpx;
+}
+.pay-name.data-v-e6eb7748 {
+	font-size: 26rpx;
+	font-weight: 500;
+	color: #2c4d3a;
+}
+/* 充值按钮 */
+.recharge-btn.data-v-e6eb7748 {
+	background: linear-gradient(105deg, #6b8c42, #528a34);
+	border-radius: 80rpx;
+	padding: 32rpx 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 36rpx;
+	font-weight: 700;
+	color: white;
+	box-shadow: 0 12rpx 28rpx rgba(107,140,66,0.3);
+	transition: all 0.2s;
+	margin-bottom: 40rpx;
+}
+.recharge-btn.data-v-e6eb7748:active {
+	-webkit-transform: scale(0.98);
+	        transform: scale(0.98);
+	opacity: 0.9;
+}
+/* 新增：按钮禁用态样式 */
+.recharge-btn.disabled.data-v-e6eb7748 {
+	opacity: 0.6;
+	pointer-events: none;
+}
+/* 提示文字 */
+.tips.data-v-e6eb7748 {
+	text-align: center;
+}
+.tips-text.data-v-e6eb7748 {
+	font-size: 24rpx;
+	color: #9aabb8;
+}
+

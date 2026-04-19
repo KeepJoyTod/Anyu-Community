@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunitySurveyMapper">
+    <resultMap type="com.ruoyi.community.domain.CommunitySurvey" id="CommunitySurveyResult">
+        <id property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="rating" column="rating" />
+        <result property="services" column="services" />
+        <result property="suggestion" column="suggestion" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectCommunitySurveyVo">
+        select id, user_id, rating, services, suggestion, create_time, update_time from community_survey
+    </sql>
+
+    <select id="selectCommunitySurveyById" parameterType="Long" resultMap="CommunitySurveyResult">
+        <include refid="selectCommunitySurveyVo" />
+        where id = #{id}
+    </select>
+
+    <select id="selectCommunitySurveyList" parameterType="com.ruoyi.community.domain.CommunitySurvey" resultMap="CommunitySurveyResult">
+        SELECT
+            survey_id,
+            user_id,
+            rating,
+            suggestion,
+            create_time,
+            update_time,
+            remark
+        FROM community_survey
+        WHERE
+            (user_id = #{userId} OR #{userId} IS NULL)
+          AND (rating = #{rating} OR #{rating} IS NULL)
+          AND (suggestion LIKE CONCAT('%', #{suggestion}, '%') OR #{suggestion} IS NULL OR #{suggestion} = '')
+    </select>
+
+    <insert id="insertCommunitySurvey" parameterType="com.ruoyi.community.domain.CommunitySurvey" useGeneratedKeys="true" keyProperty="id">
+        insert into community_survey (
+            user_id,
+            rating,
+            services,
+            suggestion,
+            create_time,
+            update_time
+        ) values (
+                     #{userId},
+                     #{rating},
+                     #{services},
+                     #{suggestion},
+                     #{createTime},
+                     #{updateTime}
+                 )
+    </insert>
+
+    <update id="updateCommunitySurvey" parameterType="com.ruoyi.community.domain.CommunitySurvey">
+        UPDATE community_survey
+        SET
+            user_id = COALESCE(#{userId}, user_id),
+            rating = COALESCE(#{rating}, rating),
+            services = COALESCE(#{services}, services),
+            suggestion = COALESCE(#{suggestion}, suggestion),
+            update_time = COALESCE(#{updateTime}, update_time)
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteCommunitySurveyById" parameterType="Long">
+        delete from community_survey where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunitySurveyByIds" parameterType="Long[]">
+        delete from community_survey where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

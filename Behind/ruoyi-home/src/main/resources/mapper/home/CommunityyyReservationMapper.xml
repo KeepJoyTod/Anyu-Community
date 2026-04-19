@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CommunityyyReservationMapper">
+
+    <resultMap type="CommunityyReservation" id="CommunityReservationResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="reservationType"    column="reservation_type"    />
+        <result property="reservationTime"    column="reservation_time"    />
+        <result property="reservationStatus"    column="reservation_status"    />
+        <result property="serviceAddress"    column="service_address"    />
+        <result property="rejectReason"    column="reject_reason"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <!-- 列表查询 -->
+    <select id="selectCommunityReservationList" parameterType="CommunityyReservation" resultMap="CommunityReservationResult">
+        select * from community_reservation
+        where user_id like concat('%',#{userId},'%')
+          and user_name like concat('%',#{userName},'%')
+          and user_phone like concat('%',#{userPhone},'%')
+          and reservation_type like concat('%',#{reservationType},'%')
+          and reservation_status like concat('%',#{reservationStatus},'%')
+        order by create_time desc
+    </select>
+
+    <!-- 根据ID查询 -->
+    <select id="selectCommunityReservationById" parameterType="Long" resultMap="CommunityReservationResult">
+        select * from community_reservation where id = #{id}
+    </select>
+
+    <!-- 统计数量 -->
+    <select id="haveNum" resultType="java.lang.Integer">
+        select count(*) from community_reservation
+    </select>
+
+    <!-- 新增 -->
+    <insert id="insertCommunityReservation" parameterType="CommunityyReservation" useGeneratedKeys="true" keyProperty="id">
+        insert into community_reservation (
+            user_id, user_name, user_phone, reservation_type, reservation_time,
+            reservation_status, service_address, reject_reason,
+            create_by, create_time, update_by, update_time, remark
+        ) values (
+                     #{userId}, #{userName}, #{userPhone}, #{reservationType}, #{reservationTime},
+                     #{reservationStatus}, #{serviceAddress}, #{rejectReason},
+                     #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{remark}
+                 )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateCommunityReservation" parameterType="CommunityyReservation">
+        update community_reservation
+        set user_id = #{userId},
+            user_name = #{userName},
+            user_phone = #{userPhone},
+            reservation_type = #{reservationType},
+            reservation_time = #{reservationTime},
+            reservation_status = #{reservationStatus},
+            service_address = #{serviceAddress},
+            reject_reason = #{rejectReason},
+            create_by = #{createBy},
+            create_time = #{createTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime},
+            remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <!-- 单个删除 -->
+    <delete id="deleteCommunityReservationById" parameterType="Long">
+        delete from community_reservation where id = #{id}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="deleteCommunityReservationByIds" parameterType="String">
+        delete from community_reservation where id = #{id}
+    </delete>
+
+</mapper>

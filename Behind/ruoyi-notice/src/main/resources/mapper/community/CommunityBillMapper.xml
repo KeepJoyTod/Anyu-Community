@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityBillMapper">
+    
+    <resultMap type="com.ruoyi.community.domain.CommunityBill" id="CommunityBillResult">
+        <result property="id"    column="id"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="billType"    column="bill_type"    />
+        <result property="billNo"    column="bill_no"    />
+        <result property="billAmount"    column="bill_amount"    />
+        <result property="paidAmount"    column="paid_amount"    />
+        <result property="arrearsAmount"    column="arrears_amount"    />
+        <result property="billDate"    column="bill_date"    />
+        <result property="dueDate"    column="due_date"    />
+        <result property="status"    column="status"    />
+        <result property="communityId"    column="community_id"    />
+        <result property="building"    column="building"    />
+        <result property="unit"    column="unit"    />
+        <result property="room"    column="room"    />
+        <result property="usageAmount"    column="usage_amount"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="lastReading"    column="last_reading"    />
+        <result property="currentReading"    column="current_reading"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+<!--    <sql id="selectCommunityBillVo">-->
+<!--        select id, owner_id, owner_name, bill_type, bill_no, bill_amount, paid_amount, arrears_amount, bill_date, due_date, status, community_id, building, unit, room, usage_amount, unit_price, last_reading, current_reading, create_by, create_time, update_by, update_time, remark from community_bill-->
+<!--    </sql>-->
+
+    <select id="selectCommunityBillList" parameterType="com.ruoyi.community.domain.CommunityBill" resultMap="CommunityBillResult">
+        select * from community_bill
+        where owner_id = #{ownerId}
+          or owner_name like concat('%', #{ownerName}, '%')
+           or bill_type = #{billType}
+           or bill_no = #{billNo}
+           or status = #{status}
+           or community_id = #{communityId}
+           or building = #{building}
+           or unit = #{unit}
+           or room = #{room}
+        order by create_time desc
+    </select>
+    
+    <select id="selectCommunityBillById" parameterType="Long" resultMap="CommunityBillResult">
+        select id, owner_id, owner_name, bill_type, bill_no, status,
+               community_id, building, unit, room, create_time, update_time
+        from community_bill
+        where id = #{id}
+    </select>
+
+    <insert id="insertCommunityBill" parameterType="com.ruoyi.community.domain.CommunityBill" useGeneratedKeys="true" keyProperty="id">
+        insert into community_bill (
+            owner_id, owner_name, bill_type, bill_no, bill_amount,
+            paid_amount, arrears_amount, bill_date, due_date, status,
+            community_id, building, unit, room, usage_amount,
+            unit_price, last_reading, current_reading, create_by,
+            create_time, update_by, update_time, remark
+        ) values (
+                     #{ownerId}, #{ownerName}, #{billType}, #{billNo}, #{billAmount},
+                     #{paidAmount}, #{arrearsAmount}, #{billDate}, #{dueDate}, #{status},
+                     #{communityId}, #{building}, #{unit}, #{room}, #{usageAmount},
+                     #{unitPrice}, #{lastReading}, #{currentReading}, #{createBy},
+                     #{createTime}, #{updateBy}, #{updateTime}, #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityBill" parameterType="com.ruoyi.community.domain.CommunityBill">
+        update community_bill set
+                                  owner_id = #{ownerId},
+                                  owner_name = #{ownerName},
+                                  bill_type = #{billType},
+                                  bill_no = #{billNo},
+                                  bill_amount = #{billAmount},
+                                  paid_amount = #{paidAmount},
+                                  arrears_amount = #{arrearsAmount},
+                                  bill_date = #{billDate},
+                                  due_date = #{dueDate},
+                                  status = #{status},
+                                  community_id = #{communityId},
+                                  building = #{building},
+                                  unit = #{unit},
+                                  room = #{room},
+                                  usage_amount = #{usageAmount},
+                                  unit_price = #{unitPrice},
+                                  last_reading = #{lastReading},
+                                  current_reading = #{currentReading},
+                                  create_by = #{createBy},
+                                  create_time = #{createTime},
+                                  update_by = #{updateBy},
+                                  update_time = #{updateTime},
+                                  remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityBillById" parameterType="Long">
+        delete from community_bill where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityBillByIds" parameterType="String">
+--         delete from community_bill where id = #{id}
+        DELETE FROM community_bill WHERE notice_id IN (${ids})
+
+    </delete>
+
+</mapper>

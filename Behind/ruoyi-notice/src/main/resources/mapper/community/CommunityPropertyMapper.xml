@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityPropertyMapper">
+    
+    <resultMap type="com.ruoyi.community.domain.CommunityProperty" id="CommunityPropertyResult">
+        <result property="id"    column="id"    />
+        <result property="propertyName"    column="property_name"    />
+        <result property="contactPerson"    column="contact_person"    />
+        <result property="contactPhone"    column="contact_phone"    />
+        <result property="address"    column="address"    />
+        <result property="workTime"    column="work_time"    />
+        <result property="serviceContent"    column="service_content"    />
+        <result property="communityId"    column="community_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+<!--    <sql id="selectCommunityPropertyVo">-->
+<!--        select id, property_name, contact_person, contact_phone, address, work_time, service_content, community_id, create_by, create_time, update_by, update_time, remark from community_property-->
+<!--    </sql>-->
+
+    <select id="selectCommunityProperty" resultMap="CommunityPropertyResult">
+        select
+            id, property_name, contact_person, contact_phone, address, work_time, service_content, community_id, create_by, create_time, update_by, update_time, remark
+        from community_property
+                 limit 1
+    </select>
+
+    <insert id="insertCommunityProperty" parameterType="com.ruoyi.community.domain.CommunityProperty" useGeneratedKeys="true" keyProperty="id">
+        insert into community_property (
+            property_name, contact_person, contact_phone, address,
+            work_time, service_content, community_id,
+            create_by, create_time, update_by, update_time, remark
+        ) values (
+                     #{propertyName}, #{contactPerson}, #{contactPhone}, #{address},
+                     #{workTime}, #{serviceContent}, #{communityId},
+                     #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityProperty" parameterType="com.ruoyi.community.domain.CommunityProperty">
+        update community_property set
+                                      property_name = #{propertyName},
+                                      contact_person = #{contactPerson},
+                                      contact_phone = #{contactPhone},
+                                      address = #{address},
+                                      work_time = #{workTime},
+                                      service_content = #{serviceContent},
+                                      community_id = #{communityId},
+                                      create_by = #{createBy},
+                                      create_time = #{createTime},
+                                      update_by = #{updateBy},
+                                      update_time = #{updateTime},
+                                      remark = #{remark}
+        where id = #{id}
+    </update>
+
+</mapper>

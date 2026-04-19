@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CommunityStationMapper">
+    
+    <resultMap type="CommunityStation" id="CommunityStationResult">
+        <result property="id"    column="id"    />
+        <result property="expressNo"    column="express_no"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="userRoom"    column="user_room"    />
+        <result property="expressCompany"    column="express_company"    />
+        <result property="stationStatus"    column="station_status"    />
+        <result property="storageTime"    column="storage_time"    />
+        <result property="pickTime"    column="pick_time"    />
+        <result property="operator"    column="operator"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+
+    <select id="selectCommunityStationList" parameterType="CommunityStation" resultMap="CommunityStationResult">
+        SELECT id, express_no, user_id, user_name, user_phone, user_room, express_company, station_status, storage_time, pick_time, operator, create_by, create_time, update_by, update_time, remark
+        FROM community_station
+        WHERE express_no = #{expressNo}
+          AND user_id = #{userId}
+          AND user_name LIKE CONCAT('%', #{userName}, '%')
+          AND user_phone = #{userPhone}
+          AND user_room = #{userRoom}
+          AND express_company = #{expressCompany}
+          AND station_status = #{stationStatus}
+          AND storage_time = #{storageTime}
+          AND pick_time = #{pickTime}
+          AND operator = #{operator}
+    </select>
+    
+    <select id="selectCommunityStationById" parameterType="Long" resultMap="CommunityStationResult">
+        SELECT id, express_no, user_id, user_name, user_phone, user_room, express_company, station_status, storage_time, pick_time, operator, create_by, create_time, update_by, update_time, remark
+        FROM community_station
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertCommunityStation" parameterType="CommunityStation" useGeneratedKeys="true" keyProperty="id">
+        insert into community_station (
+            express_no,
+            user_id,
+            user_name,
+            user_phone,
+            user_room,
+            express_company,
+            station_status,
+            storage_time,
+            pick_time,
+            operator,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            remark
+        ) values (
+                     #{expressNo},
+                     #{userId},
+                     #{userName},
+                     #{userPhone},
+                     #{userRoom},
+                     #{expressCompany},
+                     #{stationStatus},
+                     #{storageTime},
+                     #{pickTime},
+                     #{operator},
+                     #{createBy},
+                     #{createTime},
+                     #{updateBy},
+                     #{updateTime},
+                     #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityStation" parameterType="CommunityStation">
+        update community_station
+        set
+            express_no = #{expressNo},
+            user_id = #{userId},
+            user_name = #{userName},
+            user_phone = #{userPhone},
+            user_room = #{userRoom},
+            express_company = #{expressCompany},
+            station_status = #{stationStatus},
+            storage_time = #{storageTime},
+            pick_time = #{pickTime},
+            operator = #{operator},
+            create_by = #{createBy},
+            create_time = #{createTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime},
+            remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityStationById" parameterType="Long">
+        delete from community_station where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityStationByIds" parameterType="String">
+        delete from community_station where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

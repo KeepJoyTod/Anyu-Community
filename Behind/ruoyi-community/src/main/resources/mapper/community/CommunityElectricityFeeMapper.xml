@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityElectricityFeeMapper">
+
+    <resultMap type="com.ruoyi.community.domain.CommunityElectricityFee" id="CommunityElectricityFeeResult">
+        <id     property="electricityId" column="electricity_id" />
+        <result property="userId"        column="user_id" />
+        <result property="userName"      column="user_name" />
+        <result property="userRoom"      column="user_room" />
+        <result property="readMonth"     column="read_month" />
+        <result property="lastReading"   column="last_reading" />
+        <result property="currentReading" column="current_reading" />
+        <result property="usedAmount"    column="used_amount" />
+        <result property="unitPrice"     column="unit_price" />
+        <result property="totalFee"      column="total_fee" />
+        <result property="feeStatus"     column="fee_status" />
+        <result property="dueDate"       column="due_date" />
+        <result property="paymentTime"   column="payment_time" />
+        <result property="paymentNo"     column="payment_no" />
+        <result property="overdueAmount" column="overdue_amount" />
+        <result property="reader"        column="reader" />
+        <result property="readTime"      column="read_time" />
+        <result property="createTime"    column="create_time" />
+        <result property="updateTime"    column="update_time" />
+    </resultMap>
+
+    <select id="selectElectricityFeeById" parameterType="Long" resultMap="CommunityElectricityFeeResult">
+        select * from community_electricity_fee where electricity_id = #{electricityId}
+    </select>
+
+    <select id="selectUnpaidByUserId" parameterType="Long" resultMap="CommunityElectricityFeeResult">
+        select * from community_electricity_fee
+        where user_id = #{userId} and fee_status = 'unpaid'
+    </select>
+
+    <update id="updateStatusToPaid">
+        update community_electricity_fee
+        set fee_status = 'paid',
+            payment_time = now(),
+            payment_no = #{paymentNo}
+        where electricity_id = #{electricityId}
+    </update>
+
+    <insert id="insertElectricityFee" parameterType="com.ruoyi.community.domain.CommunityElectricityFee" useGeneratedKeys="true" keyProperty="electricityId">
+        insert into community_electricity_fee (
+            user_id, user_name, user_room, read_month, last_reading, current_reading, used_amount, unit_price, total_fee, balance, fee_status, due_date, payment_time, payment_no, overdue_amount, reader, read_time, remark
+        ) values (
+            #{userId}, #{userName}, #{userRoom}, #{readMonth}, #{lastReading}, #{currentReading}, #{usedAmount}, #{unitPrice}, #{totalFee}, #{balance}, #{feeStatus}, #{dueDate}, #{paymentTime}, #{paymentNo}, #{overdueAmount}, #{reader}, #{readTime}, #{remark}
+        )
+    </insert>
+
+    <update id="updateBalanceByUserId" parameterType="map">
+        update community_electricity_fee
+        set balance = balance + #{amount}
+        where electricity_id = (
+            select electricity_id from (
+                select electricity_id from community_electricity_fee
+                where user_id = #{userId}
+                order by electricity_id desc
+                limit 1
+            ) as temp
+        )
+    </update>
+
+    <select id="selectLatestByUserId" parameterType="Long" resultType="com.ruoyi.community.domain.CommunityElectricityFee">
+        select * from community_electricity_fee
+        where user_id = #{userId}
+        order by electricity_id desc
+        limit 1
+    </select>
+
+</mapper>

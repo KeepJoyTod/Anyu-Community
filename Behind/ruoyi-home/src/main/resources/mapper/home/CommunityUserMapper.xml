@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CommunityUserMapper">
+
+    <resultMap type="CommunityUser" id="CommunityUserResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="gender"    column="gender"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="specificAddress"    column="specific_address"    />
+        <result property="emergencyContact"    column="emergency_contact"    />
+        <result property="emergencyPhone"    column="emergency_phone"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <!-- 列表查询 -->
+    <select id="selectCommunityUserList" parameterType="CommunityUser" resultMap="CommunityUserResult">
+        select * from community_user
+        where name like concat('%',#{name},'%')
+          and phone like concat('%',#{phone},'%')
+          and id_card like concat('%',#{idCard},'%')
+          and gender like concat('%',#{gender},'%')
+          and specific_address like concat('%',#{specificAddress},'%')
+        order by create_time desc
+    </select>
+
+    <!-- 根据ID查询 -->
+    <select id="selectCommunityUserById" parameterType="Long" resultMap="CommunityUserResult">
+        select * from community_user where id = #{id}
+    </select>
+
+    <!-- 统计总人数 -->
+    <select id="havaUserNum" resultType="Integer">
+        select count(*) from community_user
+    </select>
+
+    <!-- 按年份统计 -->
+    <select id="haveUserCount1" resultType="Integer">
+        select count(*) from community_user where live_data >= '2021-01-01' and live_data &lt; '2022-01-01'
+    </select>
+    <select id="haveUserCount2" resultType="Integer">
+        select count(*) from community_user where live_data >= '2022-01-01' and live_data &lt; '2023-01-01'
+    </select>
+    <select id="haveUserCount3" resultType="Integer">
+        select count(*) from community_user where live_data >= '2023-01-01' and live_data &lt; '2024-01-01'
+    </select>
+    <select id="haveUserCount4" resultType="Integer">
+        select count(*) from community_user where live_data >= '2024-01-01' and live_data &lt; '2025-01-01'
+    </select>
+    <select id="haveUserCount5" resultType="Integer">
+        select count(*) from community_user where live_data >= '2025-01-01' and live_data &lt; '2026-01-01'
+    </select>
+
+    <!-- 新增 -->
+    <insert id="insertCommunityUser" parameterType="CommunityUser" useGeneratedKeys="true" keyProperty="id">
+        insert into community_user (
+            name, phone, id_card, gender, birthday,
+            specific_address, emergency_contact, emergency_phone,
+            create_time, update_time, create_by, update_by, remark
+        ) values (
+                     #{name}, #{phone}, #{idCard}, #{gender}, #{birthday},
+                     #{specificAddress}, #{emergencyContact}, #{emergencyPhone},
+                     #{createTime}, #{updateTime}, #{createBy}, #{updateBy}, #{remark}
+                 )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateCommunityUser" parameterType="CommunityUser">
+        update community_user
+        set name = #{name},
+            phone = #{phone},
+            id_card = #{idCard},
+            gender = #{gender},
+            birthday = #{birthday},
+            specific_address = #{specificAddress},
+            emergency_contact = #{emergencyContact},
+            emergency_phone = #{emergencyPhone},
+            create_time = #{createTime},
+            update_time = #{updateTime},
+            create_by = #{createBy},
+            update_by = #{updateBy},
+            remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <!-- 单个删除 -->
+    <delete id="deleteCommunityUserById" parameterType="Long">
+        delete from community_user where id = #{id}
+    </delete>
+
+    <!-- 批量删除 -->
+    <delete id="deleteCommunityUserByIds" parameterType="String">
+        delete from community_user where id = #{id}
+    </delete>
+
+</mapper>

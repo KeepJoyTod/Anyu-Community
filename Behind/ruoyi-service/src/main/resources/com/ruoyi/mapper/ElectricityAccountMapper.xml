@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.ElectricityAccountMapper">
+    <select id="selectElectricityAccountByUserId" resultType="com.ruoyi.domain.ElectricityAccount">
+        select * from electricity_account where user_id = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.domain.ElectricityAccount" useGeneratedKeys="true" keyProperty="id">
+        insert into electricity_account (user_id, balance, electricity_amount, create_time, update_time)
+        values (#{userId}, #{balance}, #{electricityAmount}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="updateById" parameterType="com.ruoyi.domain.ElectricityAccount">
+        update electricity_account
+        <set>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="balance != null">balance = #{balance},</if>
+            <if test="electricityAmount != null">electricity_amount = #{electricityAmount},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.CommunityComplaintMapper">
+
+    <resultMap type="com.ruoyi.domain.CommunityComplaint" id="CommunityComplaintResult">
+        <id property="id" column="id" />
+        <result property="userId" column="user_id" />
+        <result property="userName" column="user_name" />
+        <result property="userPhone" column="user_phone" />
+        <result property="complaintTitle" column="complaint_title" />
+        <result property="complaintContent" column="complaint_content" />
+        <result property="complaintType" column="complaint_type" />
+        <result property="complaintStatus" column="complaint_status" />
+        <result property="handleUserId" column="handle_user_id" />
+        <result property="handleUserName" column="handle_user_name" />
+        <result property="handleResult" column="handle_result" />
+        <result property="handleTime" column="handle_time" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <select id="selectById" resultMap="CommunityComplaintResult">
+        select * from community_complaint where id = #{id}
+    </select>
+
+    <select id="selectList" resultMap="CommunityComplaintResult">
+        select * from community_complaint
+        <where>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="complaintStatus != null">and complaint_status = #{complaintStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.domain.CommunityComplaint">
+        insert into community_complaint (id, user_id, user_name, user_phone, complaint_title, complaint_content, 
+                                       complaint_type, complaint_status, handle_user_id, handle_user_name, 
+                                       handle_result, handle_time, create_by, create_time, update_by, 
+                                       update_time, remark)
+        values (#{id}, #{userId}, #{userName}, #{userPhone}, #{complaintTitle}, #{complaintContent}, 
+                #{complaintType}, #{complaintStatus}, #{handleUserId}, #{handleUserName}, 
+                #{handleResult}, #{handleTime}, #{createBy}, #{createTime}, #{updateBy}, 
+                #{updateTime}, #{remark})
+    </insert>
+
+    <update id="updateById" parameterType="com.ruoyi.domain.CommunityComplaint">
+        update community_complaint
+        set user_id = #{userId},
+            user_name = #{userName},
+            user_phone = #{userPhone},
+            complaint_title = #{complaintTitle},
+            complaint_content = #{complaintContent},
+            complaint_type = #{complaintType},
+            complaint_status = #{complaintStatus},
+            handle_user_id = #{handleUserId},
+            handle_user_name = #{handleUserName},
+            handle_result = #{handleResult},
+            handle_time = #{handleTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime},
+            remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from community_complaint where id = #{id}
+    </delete>
+
+</mapper>

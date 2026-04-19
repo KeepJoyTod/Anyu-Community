@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityRepairOrderMapper">
+    
+    <resultMap type="com.ruoyi.community.domain.CommunityRepairOrder" id="CommunityRepairOrderResult">
+        <result property="orderId"    column="order_id"    />
+        <result property="repairId"    column="repair_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userRoom"    column="user_room"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="repairType"    column="repair_type"    />
+        <result property="repairAddress"    column="repair_address"    />
+        <result property="repairDesc"    column="repair_desc"    />
+        <result property="repairImages"    column="repair_images"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <resultMap type="com.ruoyi.community.domain.CommunityRepairOrder" id="CommunityRepairOrderWithRepairResult" extends="CommunityRepairOrderResult">
+        <association property="repair" javaType="com.ruoyi.community.domain.CommunityRepair">
+            <result property="repairId"    column="r_repair_id"    />
+            <result property="repairmanId"    column="r_repairman_id"    />
+            <result property="repairmanName"    column="r_repairman_name"    />
+            <result property="repairmanPhone"    column="r_repairman_phone"    />
+            <result property="assignTime"    column="r_assign_time"    />
+            <result property="arriveTime"    column="r_arrive_time"    />
+            <result property="completeTime"    column="r_complete_time"    />
+            <result property="repairCost"    column="r_repair_cost"    />
+            <result property="costDesc"    column="r_cost_desc"    />
+            <result property="repairResult"    column="r_repair_result"    />
+            <result property="userRating"    column="r_user_rating"    />
+            <result property="userFeedback"    column="r_user_feedback"    />
+        </association>
+    </resultMap>
+
+<!--    <sql id="selectCommunityRepairOrderVo">-->
+<!--        select order_id, repair_id, user_id, user_name, user_room, user_phone, repair_type, repair_address, repair_desc, repair_images, order_status, create_time, update_time, remark from community_repair_order-->
+<!--    </sql>-->
+
+    <sql id="selectCommunityRepairOrderWithRepair">
+        select o.order_id, o.repair_id, o.user_id, o.user_name, o.user_room, o.user_phone, o.repair_type, o.repair_address, o.repair_desc, o.repair_images, o.order_status, o.create_time, o.update_time, o.remark,
+               r.repair_id as r_repair_id, r.repairman_id as r_repairman_id, r.repairman_name as r_repairman_name, r.repairman_phone as r_repairman_phone, r.assign_time as r_assign_time, r.arrive_time as r_arrive_time, r.complete_time as r_complete_time, r.repair_cost as r_repair_cost, r.cost_desc as r_cost_desc, r.repair_result as r_repair_result, r.user_rating as r_user_rating, r.user_feedback as r_user_feedback
+        from community_repair_order o
+        left join community_repair r on o.repair_id = r.repair_id
+    </sql>
+
+    <select id="selectCommunityRepairOrderList" parameterType="com.ruoyi.community.domain.CommunityRepairOrder" resultMap="CommunityRepairOrderWithRepairResult">
+        select o.id, o.user_id, o.user_name, o.repair_type, o.order_status,
+               o.repair_content, o.create_time, o.update_time,
+               r.repairman_id, r.repairman_name, r.repairman_phone,
+               r.assign_time, r.arrive_time, r.complete_time,
+               r.repair_cost, r.cost_desc, r.repair_result
+        from community_repair_order o
+                 left join community_repair r on o.repair_id = r.repair_id
+        where o.user_id = #{userId}
+          and o.user_name like concat('%', #{userName}, '%')
+          and o.repair_type = #{repairType}
+          and o.order_status = #{orderStatus}
+        order by o.create_time desc
+    </select>
+    
+    <select id="selectCommunityRepairOrderById" parameterType="Long" resultMap="CommunityRepairOrderWithRepairResult">
+        select o.id, o.user_id, o.user_name, o.repair_type, o.order_status,
+               o.repair_content, o.create_time, o.update_time,
+               r.repairman_id, r.repairman_name, r.repairman_phone,
+               r.assign_time, r.arrive_time, r.complete_time,
+               r.repair_cost, r.cost_desc, r.repair_result
+        from community_repair_order o
+                 left join community_repair r on o.repair_id = r.repair_id
+        where o.order_id = #{orderId}
+    </select>
+
+    <insert id="insertCommunityRepairOrder" parameterType="com.ruoyi.community.domain.CommunityRepairOrder" useGeneratedKeys="true" keyProperty="orderId">
+        insert into community_repair_order (
+            repair_id, user_id, user_name, user_room, user_phone,
+            repair_type, repair_address, repair_desc, repair_images,
+            order_status, remark
+        ) values (
+                     #{repairId}, #{userId}, #{userName}, #{userRoom}, #{userPhone},
+                     #{repairType}, #{repairAddress}, #{repairDesc}, #{repairImages},
+                     #{orderStatus}, #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityRepairOrder" parameterType="com.ruoyi.community.domain.CommunityRepairOrder">
+        update community_repair_order set
+                                          repair_id = #{repairId},
+                                          user_id = #{userId},
+                                          user_name = #{userName},
+                                          user_room = #{userRoom},
+                                          user_phone = #{userPhone},
+                                          repair_type = #{repairType},
+                                          repair_address = #{repairAddress},
+                                          repair_desc = #{repairDesc},
+                                          repair_images = #{repairImages},
+                                          order_status = #{orderStatus},
+                                          remark = #{remark}
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteCommunityRepairOrderById" parameterType="Long">
+        delete from community_repair_order where order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteCommunityRepairOrderByIds" parameterType="String">
+--         delete from community_repair_order where order_id = #{orderId}
+        DELETE FROM community_repair_order WHERE order_id IN (${orderIds})
+    </delete>
+
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.SuggestionMapper">
+    <resultMap type="com.ruoyi.domain.Suggestion" id="SuggestionResult">
+        <id property="suggestionId" column="suggestion_id" />
+        <result property="userId" column="user_id" />
+        <result property="userName" column="user_name" />
+        <result property="userPhone" column="user_phone" />
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="images" column="images" />
+        <result property="status" column="status" />
+        <result property="handleUserId" column="handle_user_id" />
+        <result property="handleUserName" column="handle_user_name" />
+        <result property="handleResult" column="handle_result" />
+        <result property="handleTime" column="handle_time" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+    </resultMap>
+    <select id="selectById" resultMap="SuggestionResult">
+        select * from community_suggestion where suggestion_id = #{id}
+    </select>
+    <select id="selectList" resultMap="SuggestionResult">
+        select * from community_suggestion
+        <where>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    <insert id="insert" parameterType="com.ruoyi.domain.Suggestion">
+        insert into community_suggestion (suggestion_id, user_id, user_name, user_phone, title, content, 
+                                       images, status, handle_user_id, handle_user_name, 
+                                       handle_result, handle_time, create_by, create_time, update_by, 
+                                       update_time, remark)
+        values (#{suggestionId}, #{userId}, #{userName}, #{userPhone}, #{title}, #{content}, 
+                #{images}, #{status}, #{handleUserId}, #{handleUserName}, 
+                #{handleResult}, #{handleTime}, #{createBy}, #{createTime}, #{updateBy}, 
+                #{updateTime}, #{remark})
+    </insert>
+    <update id="updateById" parameterType="com.ruoyi.domain.Suggestion">
+        update community_suggestion
+        set user_id = #{userId},
+            user_name = #{userName},
+            user_phone = #{userPhone},
+            title = #{title},
+            content = #{content},
+            images = #{images},
+            status = #{status},
+            handle_user_id = #{handleUserId},
+            handle_user_name = #{handleUserName},
+            handle_result = #{handleResult},
+            handle_time = #{handleTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime},
+            remark = #{remark}
+        where suggestion_id = #{suggestionId}
+    </update>
+    <delete id="deleteById">
+        delete from community_suggestion where suggestion_id = #{id}
+    </delete>
+</mapper>

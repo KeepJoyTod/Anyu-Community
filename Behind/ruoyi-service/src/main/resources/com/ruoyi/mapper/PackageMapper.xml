@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.PackageMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.domain.PackageEntity">
+        <id column="id" property="id" />
+        <result column="company" property="company" />
+        <result column="express_icon" property="expressIcon" />
+        <result column="pickup_code" property="pickupCode" />
+        <result column="tracking_no" property="trackingNo" />
+        <result column="arrival_time" property="arrivalTime" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT * FROM packages WHERE id = #{id}
+    </select>
+
+
+
+    <select id="selectPackageList" resultMap="BaseResultMap">
+        SELECT * FROM packages ORDER BY arrival_time DESC LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="selectPendingCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM packages WHERE status = 2
+    </select>
+
+    <select id="selectPendingPackages" resultMap="BaseResultMap">
+        SELECT * FROM packages WHERE status = 2 ORDER BY arrival_time DESC
+    </select>
+
+    <update id="updateById" parameterType="com.ruoyi.domain.PackageEntity">
+        UPDATE packages SET
+            company = #{company},
+            express_icon = #{expressIcon},
+            pickup_code = #{pickupCode},
+            tracking_no = #{trackingNo},
+            arrival_time = #{arrivalTime},
+            status = #{status}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

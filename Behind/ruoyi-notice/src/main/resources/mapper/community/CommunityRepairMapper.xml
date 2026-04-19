@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityRepairMapper">
+    
+    <resultMap type="com.ruoyi.community.domain.CommunityRepair" id="CommunityRepairResult">
+        <result property="repairId"    column="repair_id"    />
+        <result property="repairmanId"    column="repairman_id"    />
+        <result property="repairmanName"    column="repairman_name"    />
+        <result property="repairmanPhone"    column="repairman_phone"    />
+        <result property="assignTime"    column="assign_time"    />
+        <result property="arriveTime"    column="arrive_time"    />
+        <result property="completeTime"    column="complete_time"    />
+        <result property="repairCost"    column="repair_cost"    />
+        <result property="costDesc"    column="cost_desc"    />
+        <result property="repairResult"    column="repair_result"    />
+        <result property="userRating"    column="user_rating"    />
+        <result property="userFeedback"    column="user_feedback"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+<!--    <sql id="selectCommunityRepairVo">-->
+<!--        select repair_id, repairman_id, repairman_name, repairman_phone, assign_time, arrive_time, complete_time, repair_cost, cost_desc, repair_result, user_rating, user_feedback, create_time, update_time, remark from community_repair-->
+<!--    </sql>-->
+
+    <select id="selectCommunityRepairList" parameterType="com.ruoyi.community.domain.CommunityRepair" resultMap="CommunityRepairResult">
+        select id, repairman_id, repairman_name, repair_type, repair_content,
+        repair_status, create_time, update_time, remark
+        from community_repair
+        where repairman_id = #{repairmanId}
+        and repairman_name like concat('%', #{repairmanName}, '%')
+        order by create_time desc
+    </select>
+    
+    <select id="selectCommunityRepairById" parameterType="Long" resultMap="CommunityRepairResult">
+        select id, repairman_id, repairman_name, repair_type, repair_content,
+               repair_status, create_time, update_time, remark
+        from community_repair
+        where repair_id = #{repairId}
+    </select>
+
+    <insert id="insertCommunityRepair" parameterType="com.ruoyi.community.domain.CommunityRepair" useGeneratedKeys="true" keyProperty="repairId">
+        insert into community_repair (
+            repairman_id, repairman_name, repairman_phone,
+            assign_time, arrive_time, complete_time,
+            repair_cost, cost_desc, repair_result,
+            user_rating, user_feedback, remark
+        ) values (
+                     #{repairmanId}, #{repairmanName}, #{repairmanPhone},
+                     #{assignTime}, #{arriveTime}, #{completeTime},
+                     #{repairCost}, #{costDesc}, #{repairResult},
+                     #{userRating}, #{userFeedback}, #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityRepair" parameterType="com.ruoyi.community.domain.CommunityRepair">
+        update community_repair set
+                                    repairman_id = #{repairmanId},
+                                    repairman_name = #{repairmanName},
+                                    repairman_phone = #{repairmanPhone},
+                                    assign_time = #{assignTime},
+                                    arrive_time = #{arriveTime},
+                                    complete_time = #{completeTime},
+                                    repair_cost = #{repairCost},
+                                    cost_desc = #{costDesc},
+                                    repair_result = #{repairResult},
+                                    user_rating = #{userRating},
+                                    user_feedback = #{userFeedback},
+                                    remark = #{remark}
+        where repair_id = #{repairId}
+    </update>
+
+    <delete id="deleteCommunityRepairById" parameterType="Long">
+        delete from community_repair where repair_id = #{repairId}
+    </delete>
+
+    <delete id="deleteCommunityRepairByIds" parameterType="String">
+--         delete from community_repair where repair_id = #{repairId}
+        DELETE FROM community_repair WHERE repair_id IN (${repairIds})
+    </delete>
+
+</mapper>

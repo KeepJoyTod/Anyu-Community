@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityPaymentMapper">
+
+    <resultMap type="com.ruoyi.community.domain.CommunityPayment" id="CommunityPaymentResult">
+        <id     property="id"            column="id" />
+        <result property="userId"        column="user_id" />
+        <result property="userName"      column="user_name" />
+        <result property="userRoom"      column="user_room" />
+        <result property="paymentType"   column="payment_type" />
+        <result property="paymentAmount" column="payment_amount" />
+        <result property="paymentStatus" column="payment_status" />
+        <result property="paymentNo"     column="payment_no" />
+        <result property="paymentTime"   column="payment_time" />
+        <result property="overdueAmount" column="overdue_amount" />
+        <result property="dueTime"       column="due_time" />
+        <result property="createTime"    column="create_time" />
+        <result property="updateTime"    column="update_time" />
+    </resultMap>
+
+    <select id="selectPaymentById" parameterType="Long" resultMap="CommunityPaymentResult">
+        select * from community_payment where id = #{paymentId}
+    </select>
+
+    <select id="selectUnpaidByUserId" parameterType="Long" resultMap="CommunityPaymentResult">
+        select * from community_payment
+        where user_id = #{userId} and payment_status = 'unpaid' and payment_type = 'property'
+    </select>
+
+    <update id="updateStatusToPaid">
+        update community_payment
+        set payment_status = 'paid',
+            payment_time = now(),
+            payment_no = #{paymentNo}
+        where id = #{paymentId}
+    </update>
+
+</mapper>

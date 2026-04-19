@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.notice.mapper.CommunityNoticeMapper">
+    
+    <resultMap type="com.ruoyi.notice.domain.CommunityNotice" id="CommunityNoticeResult">
+        <result property="id"    column="notice_id"    />
+        <result property="noticeTitle"    column="notice_title"    />
+        <result property="noticeContent"    column="notice_content"    />
+        <result property="noticeType"    column="notice_type"    />
+        <result property="publishUserId"    column="publish_user_id"    />
+        <result property="publishUserName"    column="publish_user_name"    />
+        <result property="publishTime"    column="publish_time"    />
+        <result property="status"    column="status"    />
+        <result property="topFlag"    column="top_flag"    />
+        <result property="topEndTime"    column="top_end_time"    />
+        <result property="readCount"    column="read_count"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+<!--    <sql id="selectCommunityNoticeVo">-->
+<!--        select notice_id, notice_title, notice_content, notice_type, publish_user_id, publish_user_name, publish_time, status, top_flag, top_end_time, read_count, create_by, create_time, update_by, update_time, remark from community_notice-->
+<!--    </sql>-->
+
+    <select id="selectCommunityNoticeList" parameterType="com.ruoyi.notice.domain.CommunityNotice" resultMap="CommunityNoticeResult">
+        SELECT
+            id,
+            notice_title,
+            notice_content,
+            notice_type,
+            publish_user_id,
+            publish_user_name,
+            publish_time,
+            status,
+            top_flag,
+            top_end_time,
+            read_count
+        FROM community_notice
+        WHERE
+            (#{noticeTitle} IS NULL OR notice_title = #{noticeTitle})
+          AND (#{noticeContent} IS NULL OR notice_content = #{noticeContent})
+          AND (#{noticeType} IS NULL OR notice_type = #{noticeType})
+          AND (#{publishUserId} IS NULL OR publish_user_id = #{publishUserId})
+          AND (#{publishUserName} IS NULL OR publish_user_name LIKE CONCAT('%', #{publishUserName}, '%'))
+          AND (#{publishTime} IS NULL OR DATE(publish_time) = DATE(#{publishTime}))
+          AND (#{status} IS NULL OR status = #{status})
+          AND (#{topFlag} IS NULL OR top_flag = #{topFlag})
+          AND (#{topEndTime} IS NULL OR DATE(top_end_time) = DATE(#{topEndTime}))
+          AND (#{readCount} IS NULL OR read_count = #{readCount})
+    </select>
+    
+    <select id="selectCommunityNoticeById" parameterType="Long" resultMap="CommunityNoticeResult">
+        SELECT
+            notice_id, notice_title, notice_content, notice_type, publish_user_id, publish_user_name, publish_time, status, top_flag, top_end_time, read_count, create_by, create_time, update_by, update_time, remark
+        FROM community_notice
+        WHERE notice_id = #{id}
+    </select>
+
+    <insert id="insertCommunityNotice" parameterType="com.ruoyi.notice.domain.CommunityNotice" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO community_notice (
+            notice_title,
+            notice_content,
+            notice_type,
+            publish_user_id,
+            publish_user_name,
+            publish_time,
+            status,
+            top_flag,
+            top_end_time,
+            read_count,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            remark
+        ) VALUES (
+                     #{noticeTitle},
+                     #{noticeContent},
+                     #{noticeType},
+                     #{publishUserId},
+                     #{publishUserName},
+                     #{publishTime},
+                     #{status},
+                     #{topFlag},
+                     #{topEndTime},
+                     #{readCount},
+                     #{createBy},
+                     #{createTime},
+                     #{updateBy},
+                     #{updateTime},
+                     #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityNotice" parameterType="com.ruoyi.notice.domain.CommunityNotice">
+        UPDATE community_notice
+        SET
+            notice_title = #{noticeTitle},
+            notice_content = #{noticeContent},
+            notice_type = #{noticeType},
+            publish_user_id = #{publishUserId},
+            publish_user_name = #{publishUserName},
+            publish_time = #{publishTime},
+            status = #{status},
+            top_flag = #{topFlag},
+            top_end_time = #{topEndTime},
+            read_count = #{readCount},
+            create_by = #{createBy},
+            create_time = #{createTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime},
+            remark = #{remark}
+        WHERE notice_id = #{id}
+    </update>
+
+    <delete id="deleteCommunityNoticeById" parameterType="Long">
+        delete from community_notice where notice_id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityNoticeByIds" parameterType="String">
+        DELETE FROM community_notice WHERE notice_id IN (${ids})
+    </delete>
+
+</mapper>

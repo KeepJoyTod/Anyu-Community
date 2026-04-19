@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityPropertyPraiseMapper">
+    
+    <resultMap type="com.ruoyi.community.domain.CommunityPropertyPraise" id="CommunityPropertyPraiseResult">
+        <result property="id"    column="id"    />
+        <result property="ownerId"    column="owner_id"    />
+        <result property="ownerName"    column="owner_name"    />
+        <result property="praiseType"    column="praise_type"    />
+        <result property="praiseContent"    column="praise_content"    />
+        <result property="praiseTarget"    column="praise_target"    />
+        <result property="status"    column="status"    />
+        <result property="replyContent"    column="reply_content"    />
+        <result property="replyTime"    column="reply_time"    />
+        <result property="communityId"    column="community_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCommunityPropertyPraiseVo">
+        select id, owner_id, owner_name, praise_type, praise_content, praise_target, status, reply_content, reply_time, community_id, create_by, create_time, update_by, update_time, remark from community_property_praise
+    </sql>
+
+    <select id="selectCommunityPropertyPraiseList" parameterType="com.ruoyi.community.domain.CommunityPropertyPraise" resultMap="CommunityPropertyPraiseResult">
+        select id, owner_id, owner_name, praise_type, praise_target,
+               status, content, create_time, update_time, remark
+        from community_property_praise
+        where owner_id = #{ownerId}
+          and owner_name like concat('%', #{ownerName}, '%')
+          and praise_type = #{praiseType}
+          and praise_target like concat('%', #{praiseTarget}, '%')
+          and status = #{status}
+        order by create_time desc
+    </select>
+
+    <select id="selectCommunityPropertyPraiseById" parameterType="Long" resultMap="CommunityPropertyPraiseResult">
+        select id, owner_id, owner_name, praise_type, praise_target,
+               status, content, create_time, update_time, remark
+        from community_property_praise
+        where id = #{id}
+    </select>
+
+    <insert id="insertCommunityPropertyPraise" parameterType="com.ruoyi.community.domain.CommunityPropertyPraise" useGeneratedKeys="true" keyProperty="id">
+        insert into community_property_praise (
+            owner_id, owner_name, praise_type, praise_content,
+            praise_target, status, reply_content, reply_time,
+            community_id, create_by, create_time, update_by, update_time, remark
+        ) values (
+                     #{ownerId}, #{ownerName}, #{praiseType}, #{praiseContent},
+                     #{praiseTarget}, #{status}, #{replyContent}, #{replyTime},
+                     #{communityId}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityPropertyPraise" parameterType="com.ruoyi.community.domain.CommunityPropertyPraise">
+        update community_property_praise set
+                                             owner_id = #{ownerId},
+                                             owner_name = #{ownerName},
+                                             praise_type = #{praiseType},
+                                             praise_content = #{praiseContent},
+                                             praise_target = #{praiseTarget},
+                                             status = #{status},
+                                             reply_content = #{replyContent},
+                                             reply_time = #{replyTime},
+                                             community_id = #{communityId},
+                                             create_by = #{createBy},
+                                             create_time = #{createTime},
+                                             update_by = #{updateBy},
+                                             update_time = #{updateTime},
+                                             remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityPropertyPraiseById" parameterType="Long">
+--         delete from community_property_praise where id = #{id}
+        DELETE FROM community_property_praise WHERE id IN (${ids})
+    </delete>
+
+</mapper>

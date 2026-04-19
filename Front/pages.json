@@ -1,0 +1,166 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/login",
+      "style": { "navigationBarTitleText": "登录" }
+    },
+    {
+      "path": "pages/register/register",
+      "style": { "navigationBarTitleText": "注册" }
+    },
+    {
+      "path": "pages/index/index",
+      "style": { "navigationBarTitleText": "社区服务" }
+    },
+    {
+      "path": "pages/community/community",
+      "style": { "navigationBarTitleText": "邻里圈" }
+    },
+    {
+      "path": "pages/community/donate-detail",
+      "style": { "navigationBarTitleText": "爱心捐款详情" }
+    },
+    {
+      "path": "pages/community/topic-detail",
+      "style": { "navigationBarTitleText": "活动详情" }
+    },
+    {
+      "path": "pages/service/service",
+      "style": { "navigationBarTitleText": "服务大厅" }
+    },
+    {
+      "path": "pages/service/property/propertyFee",
+      "style": { "navigationBarTitleText": "物业缴费" }
+    },
+    {
+      "path": "pages/service/visitor/visitorInvite",
+      "style": { "navigationBarTitleText": "访客邀请" }
+    },
+    {
+      "path": "pages/service/site/venueBooking",
+      "style": { "navigationBarTitleText": "场地预约" }
+    },
+    {
+      "path": "pages/service/notice/notification",
+      "style": { "navigationBarTitleText": "通知提醒" }
+    },
+    {
+      "path": "pages/service/station/expressStation",
+      "style": { "navigationBarTitleText": "快递驿站" }
+    },
+    {
+      "path": "pages/service/station/detail",
+      "style": { "navigationBarTitleText": "快递详情" }
+    },
+    {
+      "path": "pages/service/complaint/complaint",
+      "style": { "navigationBarTitleText": "投诉建议" }
+    },
+	{
+	  "path": "pages/service/complaint/suggestion",
+	  "style": { "navigationBarTitleText": "建议反馈" }
+	},
+	{
+	  "path": "pages/service/complaint/my",
+	  "style": { "navigationBarTitleText": "我的记录" }
+	},
+    {
+      "path": "pages/service/water/water",
+      "style": { "navigationBarTitleText": "水费充值" }
+    },
+    {
+      "path": "pages/service/electricity/electricity",
+      "style": { "navigationBarTitleText": "电费充值" }
+    },
+    {
+      "path": "pages/service/repair/repair",
+      "style": { "navigationBarTitleText": "报事报修" }
+    },
+    {
+      "path": "pages/profile/profile",
+      "style": { "navigationBarTitleText": "我的" }
+    },
+    {
+      "path": "pages/account/info",
+      "style": { "navigationBarTitleText": "账户中心" }
+    },
+	{
+			  "path": "pages/house/house",
+			  "style": { "navigationBarTitleText": "我的房屋" }
+			},
+    {
+      "path": "pages/setting/setting",
+      "style": { "navigationBarTitleText": "系统设置" }
+    },
+    {
+      "path": "pages/visitor/visitor",
+      "style": { "navigationBarTitleText": "访客邀请" }
+    },
+    {
+      "path": "pages/repair/repair",
+      "style": { "navigationBarTitleText": "报事报修" }
+    },
+    {
+      "path": "pages/repair/repair-list",
+      "style": { "navigationBarTitleText": "报修单据" }
+    },
+    {
+      "path": "pages/sign-up/sign-up",
+      "style": { "navigationBarTitleText": "立即报名" }
+    },
+    {
+      "path": "pages/bill/bill",
+      "style": { "navigationBarTitleText": "生活缴费" }
+    },
+    {
+      "path": "pages/mall/mall",
+      "style": { "navigationBarTitleText": "积分商城" }
+    },
+    {
+      "path": "pages/mall/task-center",
+      "style": { "navigationBarTitleText": "任务中心" }
+    },
+    {
+      "path": "pages/mall/survey",
+      "style": { "navigationBarTitleText": "满意度调研" }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "社区服务",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#6b8c42",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+		"iconPath": "static/tabbar/home.png",
+		"selectedIconPath": "static/tabbar/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/community/community",
+		"iconPath": "static/tabbar/community.png",
+		"selectedIconPath": "static/tabbar/community-active.png",
+        "text": "社区"
+      },
+      {
+        "pagePath": "pages/service/service",
+		"iconPath": "static/tabbar/service.png",
+		"selectedIconPath": "static/tabbar/service-active.png",
+        "text": "服务"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+		"iconPath": "static/tabbar/profile.png",
+		"selectedIconPath": "static/tabbar/profile-active.png",
+        "text": "我的"
+      }
+    ]
+  }
+}

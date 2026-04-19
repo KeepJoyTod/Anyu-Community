@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CommunityPayymentMapper">
+
+    <resultMap type="CommunityPayment" id="CommunityPaymentResult">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userRoom" column="user_room"/>
+        <result property="paymentType" column="payment_type"/>
+        <result property="paymentAmount" column="payment_amount"/>
+        <result property="paymentStatus" column="payment_status"/>
+        <result property="paymentNo" column="payment_no"/>
+        <result property="paymentTime" column="payment_time"/>
+        <result property="overdueAmount" column="overdue_amount"/>
+        <result property="dueTime" column="due_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <!-- 列表查询 -->
+    <select id="selectCommunityPaymentList" parameterType="CommunityPayment" resultMap="CommunityPaymentResult">
+        SELECT *
+        FROM community_payment
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="userRoom != null and userRoom != ''">
+                and user_room = #{userRoom}
+            </if>
+            <if test="paymentType != null and paymentType != ''">
+                and payment_type = #{paymentType}
+            </if>
+            <if test="paymentStatus != null and paymentStatus != ''">
+                and payment_status = #{paymentStatus}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <!-- 根据ID查询 -->
+    <select id="selectCommunityPaymentById" parameterType="Long" resultMap="CommunityPaymentResult">
+        SELECT *
+        FROM community_payment
+        WHERE id = #{id}
+    </select>
+
+    <!-- 统计总金额 -->
+    <select id="havaMoney" resultType="java.lang.Double">
+        SELECT ifnull(sum(payment_amount), 0)
+        FROM community_payment
+    </select>
+
+    <!-- 新增 -->
+    <insert id="insertCommunityPayment" parameterType="CommunityPayment" useGeneratedKeys="true" keyProperty="id">
+        insert into community_payment (
+            user_id,
+            user_name,
+            user_room,
+            payment_type,
+            payment_amount,
+            payment_status,
+            payment_no,
+            payment_time,
+            overdue_amount,
+            due_time,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            remark
+        ) values (
+                     #{userId},
+                     #{userName},
+                     #{userRoom},
+                     #{paymentType},
+                     #{paymentAmount},
+                     #{paymentStatus},
+                     #{paymentNo},
+                     #{paymentTime},
+                     #{overdueAmount},
+                     #{dueTime},
+                     #{createBy},
+                     #{createTime},
+                     #{updateBy},
+                     #{updateTime},
+                     #{remark}
+                 )
+    </insert>
+
+    <!-- 修改 -->
+    <update id="updateCommunityPayment" parameterType="CommunityPayment">
+        update community_payment
+        set
+            user_id = #{userId},
+            user_name = #{userName},
+            user_room = #{userRoom},
+            payment_type = #{paymentType},
+            payment_amount = #{paymentAmount},
+            payment_status = #{paymentStatus},
+            payment_no = #{paymentNo},
+            payment_time = #{paymentTime},
+            overdue_amount = #{overdueAmount},
+            due_time = #{dueTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime},
+            remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <!-- 单个删除 -->
+    <delete id="deleteCommunityPaymentById" parameterType="Long">
+        delete from community_payment where id = #{id}
+    </delete>
+
+    <!-- 批量删除  -->
+    <delete id="deleteCommunityPaymentByIds" parameterType="String">
+        delete from community_payment where id = #{id}
+    </delete>
+
+</mapper>

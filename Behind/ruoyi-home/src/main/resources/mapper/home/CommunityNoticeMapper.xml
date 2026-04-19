@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CommunityNoticeMapper">
+    
+    <resultMap type="CommunityNotice" id="CommunityNoticeResult">
+        <result property="id"    column="id"    />
+        <result property="noticeTitle"    column="notice_title"    />
+        <result property="noticeContent"    column="notice_content"    />
+        <result property="noticeType"    column="notice_type"    />
+        <result property="publishUserId"    column="publish_user_id"    />
+        <result property="publishUserName"    column="publish_user_name"    />
+        <result property="publishTime"    column="publish_time"    />
+        <result property="status"    column="status"    />
+        <result property="topFlag"    column="top_flag"    />
+        <result property="topEndTime"    column="top_end_time"    />
+        <result property="readCount"    column="read_count"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCommunityNoticeVo">
+        select id, notice_title, notice_content, notice_type, publish_user_id, publish_user_name, publish_time, status, top_flag, top_end_time, read_count, create_by, create_time, update_by, update_time, remark from community_notice
+    </sql>
+
+    <select id="selectCommunityNoticeList" parameterType="CommunityNotice" resultMap="CommunityNoticeResult">
+        SELECT * FROM community_notice
+        WHERE
+            (#{noticeTitle} IS NULL OR #{noticeTitle} = '' OR notice_title = #{noticeTitle})
+          AND (#{noticeContent} IS NULL OR #{noticeContent} = '' OR notice_content = #{noticeContent})
+          AND (#{noticeType} IS NULL OR #{noticeType} = '' OR notice_type = #{noticeType})
+          AND (#{publishUserId} IS NULL OR publish_user_id = #{publishUserId})
+          AND (#{publishUserName} IS NULL OR #{publishUserName} = '' OR publish_user_name LIKE CONCAT('%', #{publishUserName}, '%'))
+          AND (#{publishTime} IS NULL OR publish_time = #{publishTime})
+          AND (#{status} IS NULL OR #{status} = '' OR status = #{status})
+          AND (#{topFlag} IS NULL OR #{topFlag} = '' OR top_flag = #{topFlag})
+          AND (#{topEndTime} IS NULL OR top_end_time = #{topEndTime})
+          AND (#{readCount} IS NULL OR read_count = #{readCount})
+    </select>
+    
+    <select id="selectCommunityNoticeById" parameterType="Long" resultMap="CommunityNoticeResult">
+        SELECT id, notice_title, notice_content, notice_type, publish_user_id, publish_user_name, publish_time, status, top_flag, top_end_time, read_count
+        FROM community_notice
+        WHERE id = #{id}
+    </select>
+    <select id="haveNoticeNum" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM community_notice
+    </select>
+
+    <insert id="insertCommunityNotice" parameterType="CommunityNotice" useGeneratedKeys="true" keyProperty="id">
+        insert into community_notice (
+            notice_title,
+            notice_content,
+            notice_type,
+            publish_user_id,
+            publish_user_name,
+            publish_time,
+            status,
+            top_flag,
+            top_end_time,
+            read_count,
+            create_by,
+            create_time,
+            update_by,
+            update_time,
+            remark
+        ) values (
+                     #{noticeTitle},
+                     #{noticeContent},
+                     #{noticeType},
+                     #{publishUserId},
+                     #{publishUserName},
+                     #{publishTime},
+                     #{status},
+                     #{topFlag},
+                     #{topEndTime},
+                     #{readCount},
+                     #{createBy},
+                     #{createTime},
+                     #{updateBy},
+                     #{updateTime},
+                     #{remark}
+                 )
+    </insert>
+
+    <update id="updateCommunityNotice" parameterType="CommunityNotice">
+        UPDATE community_notice
+        SET
+            notice_title = IF(#{noticeTitle} IS NOT NULL AND #{noticeTitle} != '', #{noticeTitle}, notice_title),
+            notice_content = IF(#{noticeContent} IS NOT NULL AND #{noticeContent} != '', #{noticeContent}, notice_content),
+            notice_type = IF(#{noticeType} IS NOT NULL AND #{noticeType} != '', #{noticeType}, notice_type),
+            publish_user_id = IF(#{publishUserId} IS NOT NULL, #{publishUserId}, publish_user_id),
+            publish_user_name = IF(#{publishUserName} IS NOT NULL AND #{publishUserName} != '', #{publishUserName}, publish_user_name),
+            publish_time = IF(#{publishTime} IS NOT NULL, #{publishTime}, publish_time),
+            status = IF(#{status} IS NOT NULL AND #{status} != '', #{status}, status),
+            top_flag = IF(#{topFlag} IS NOT NULL, #{topFlag}, top_flag),
+            top_end_time = IF(#{topEndTime} IS NOT NULL, #{topEndTime}, top_end_time),
+            read_count = IF(#{readCount} IS NOT NULL, #{readCount}, read_count),
+            create_by = IF(#{createBy} IS NOT NULL, #{createBy}, create_by),
+            create_time = IF(#{createTime} IS NOT NULL, #{createTime}, create_time),
+            update_by = IF(#{updateBy} IS NOT NULL, #{updateBy}, update_by),
+            update_time = IF(#{updateTime} IS NOT NULL, #{updateTime}, update_time),
+            remark = IF(#{remark} IS NOT NULL, #{remark}, remark)
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteCommunityNoticeById" parameterType="Long">
+        delete from community_notice where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityNoticeByIds" parameterType="String">
+        delete from community_notice where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

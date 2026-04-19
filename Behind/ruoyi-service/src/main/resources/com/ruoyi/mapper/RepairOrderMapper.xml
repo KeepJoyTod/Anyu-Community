@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.RepairOrderMapper">
+    <!-- 新增维修订单 -->
+    <insert id="insert" parameterType="com.ruoyi.domain.RepairOrder">
+        insert into community_repair_order (
+        repair_id,
+        user_id,
+        user_name,
+        user_room,
+        user_phone,
+        repair_type,
+        repair_address,
+        repair_desc,
+        repair_images,
+        order_status,
+        create_time,
+        update_time,
+        remark
+        )
+        values (
+        1,
+        #{userId},
+        #{userName},
+        #{userRoom},
+        #{userPhone},
+        #{repairType},
+        #{repairAddress},
+        #{repairDesc},
+        #{repairImages},
+        #{orderStatus},
+        #{createTime},
+        #{updateTime},
+        #{remark}
+        )
+    </insert>
+
+    <!-- 根据ID查询维修订单 -->
+    <select id="selectById" parameterType="java.lang.Long" resultType="com.ruoyi.domain.RepairOrder">
+        select * from community_repair_order where order_id = #{orderId}
+    </select>
+
+    <!-- 修改维修订单 -->
+    <update id="updateById" parameterType="com.ruoyi.domain.RepairOrder">
+        update community_repair_order
+        <set>
+            user_id = #{userId},
+            user_name = #{userName},
+            user_room = #{userRoom},
+            user_phone = #{userPhone},
+            repair_type = #{repairType},
+            repair_address = #{repairAddress},
+            repair_desc = #{repairDesc},
+            repair_images = #{repairImages},
+            order_status = #{orderStatus},
+            update_time = #{updateTime},
+            remark = #{remark}
+        </set>
+        where order_id = #{orderId}
+    </update>
+
+    <!-- 删除维修订单 -->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from community_repair_order where order_id = #{orderId}
+    </delete>
+
+    <!-- 查询待处理的维修订单列表 -->
+    <select id="selectPendingOrders" resultType="com.ruoyi.domain.RepairOrder">
+        select * from community_repair_order where order_status = 'pending' order by create_time desc
+    </select>
+</mapper>

@@ -1,0 +1,61 @@
+
+.setting-page.data-v-9543fcb0 {
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+/* 头部 */
+.header.data-v-9543fcb0 {
+  background-color: #fff;
+  padding: 30rpx;
+  text-align: center;
+  border-bottom: 1rpx solid #eee;
+}
+.title.data-v-9543fcb0 {
+  font-size: 34rpx;
+  font-weight: bold;
+}
+
+/* 菜单 */
+.menu-list.data-v-9543fcb0 {
+  background-color: #fff;
+  margin-top: 30rpx;
+  border-radius: 20rpx;
+  margin: 30rpx;
+  overflow: hidden;
+}
+.menu-item.data-v-9543fcb0 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.menu-item.data-v-9543fcb0:last-child {
+  border-bottom: none;
+}
+.left.data-v-9543fcb0 {
+  display: flex;
+  align-items: center;
+}
+.icon.data-v-9543fcb0 {
+  font-size: 36rpx;
+  margin-right: 20rpx;
+}
+.name.data-v-9543fcb0 {
+  font-size: 30rpx;
+  color: #333;
+}
+.arrow.data-v-9543fcb0 {
+  font-size: 32rpx;
+  color: #999;
+}
+.size.data-v-9543fcb0 {
+  font-size: 26rpx;
+  color: #999;
+  margin-right: 10rpx;
+}
+.red.data-v-9543fcb0 {
+  color: #ff4444 !important;
+}
+

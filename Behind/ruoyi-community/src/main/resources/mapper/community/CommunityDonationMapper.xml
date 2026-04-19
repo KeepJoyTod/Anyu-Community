@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.community.mapper.CommunityDonationMapper">
+
+    <!-- 查询捐款项目列表 -->
+    <select id="selectDonationList" resultType="com.ruoyi.community.domain.CommunityDonation">
+
+        select id,
+               title,
+               content,
+               target_money as targetMoney,
+               now_money    as nowMoney,
+               donor_count  as donorCount,
+               image,
+               status,
+               create_time,
+               update_time
+        from community_donation
+        where status = 0
+        order by id desc
+
+    </select>
+
+    <!-- 更新捐赠项目的已筹金额和捐赠人数 -->
+    <update id="updateDonationAmountAndCount" parameterType="java.util.Map">
+        UPDATE community_donation
+        SET now_money = now_money + #{amount},
+            donor_count = donor_count + 1,
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+</mapper>

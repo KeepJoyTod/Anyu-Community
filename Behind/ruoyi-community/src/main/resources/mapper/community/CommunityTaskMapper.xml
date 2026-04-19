@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityTaskMapper">
+
+    <resultMap type="com.ruoyi.community.domain.CommunityTask" id="TaskResult">
+        <id property="taskId" column="task_id"/>
+        <result property="taskName" column="task_name"/>
+        <result property="taskDesc" column="task_desc"/>
+        <result property="taskType" column="task_type"/>
+        <result property="taskIcon" column="task_icon"/>
+        <result property="pointsReward" column="points_reward"/>
+        <result property="taskAction" column="task_action"/>
+        <result property="maxTimes" column="max_times"/>
+        <result property="sortOrder" column="sort_order"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap type="com.ruoyi.community.domain.CommunityUserTask" id="UserTaskResult">
+        <id property="recordId" column="record_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="taskId" column="task_id"/>
+        <result property="completeTimes" column="complete_times"/>
+        <result property="totalTimes" column="total_times"/>
+        <result property="lastCompleteTime" column="last_complete_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap type="com.ruoyi.community.domain.CommunitySigninRecord" id="SigninResult">
+        <id property="recordId" column="record_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="signinDate" column="signin_date"/>
+        <result property="consecutiveDays" column="consecutive_days"/>
+        <result property="pointsEarned" column="points_earned"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <!-- 查询所有启用的任务 -->
+    <select id="selectAllTasks" resultMap="TaskResult">
+        SELECT * FROM community_task
+        WHERE status = '0'
+        ORDER BY task_type, sort_order
+    </select>
+
+    <!-- 根据任务类型查询任务 -->
+    <select id="selectTasksByType" resultMap="TaskResult">
+        SELECT * FROM community_task
+        WHERE status = '0' AND task_type = #{taskType}
+        ORDER BY sort_order
+    </select>
+
+    <!-- 根据任务动作查询任务 -->
+    <select id="selectTaskByAction" resultMap="TaskResult">
+        SELECT * FROM community_task
+        WHERE status = '0' AND task_action = #{taskAction}
+        LIMIT 1
+    </select>
+
+    <!-- 查询用户的任务完成记录 -->
+    <select id="selectUserTask" resultMap="UserTaskResult">
+        SELECT * FROM community_user_task
+        WHERE user_id = #{userId} AND task_id = #{taskId}
+    </select>
+
+    <!-- 插入用户任务记录 -->
+    <insert id="insertUserTask" useGeneratedKeys="true" keyProperty="recordId">
+        INSERT INTO community_user_task
+        (user_id, task_id, complete_times, total_times, last_complete_time, create_time, update_time)
+        VALUES
+        (#{userId}, #{taskId}, #{completeTimes}, #{totalTimes}, #{lastCompleteTime}, NOW(), NOW())
+    </insert>
+
+    <!-- 更新用户任务记录 -->
+    <update id="updateUserTask">
+        UPDATE community_user_task
+        SET complete_times = #{completeTimes},
+            total_times = #{totalTimes},
+            last_complete_time = #{lastCompleteTime},
+            update_time = NOW()
+        WHERE record_id = #{recordId}
+    </update>
+
+    <!-- 查询用户今日任务完成次数 -->
+    <select id="selectTodayCompleteTimes" resultType="Integer">
+        SELECT complete_times FROM community_user_task
+        WHERE user_id = #{userId} AND task_id = #{taskId}
+        AND DATE(last_complete_time) = CURDATE()
+    </select>
+
+    <!-- 插入签到记录 -->
+    <insert id="insertSigninRecord" useGeneratedKeys="true" keyProperty="recordId">
+        INSERT INTO community_signin_record
+        (user_id, signin_date, consecutive_days, points_earned, create_time)
+        VALUES
+        (#{userId}, #{signinDate}, #{consecutiveDays}, #{pointsEarned}, NOW())
+    </insert>
+
+    <!-- 查询用户最近签到记录 -->
+    <select id="selectLastSigninRecord" resultMap="SigninResult">
+        SELECT * FROM community_signin_record
+        WHERE user_id = #{userId}
+        ORDER BY signin_date DESC
+        LIMIT 1
+    </select>
+
+    <!-- 查询用户今日是否已签到 -->
+    <select id="selectTodaySignin" resultType="Integer">
+        SELECT COUNT(*) FROM community_signin_record
+        WHERE user_id = #{userId} AND signin_date = CURDATE()
+    </select>
+
+</mapper>

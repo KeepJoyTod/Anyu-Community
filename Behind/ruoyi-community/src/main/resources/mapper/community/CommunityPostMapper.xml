@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.community.mapper.CommunityPostMapper">
+
+    <resultMap type="com.ruoyi.community.domain.CommunityPost" id="CommunityPostResult">
+        <id     property="postId"     column="post_id" />
+        <result property="userId"     column="user_id" />
+        <result property="userName"   column="user_name" />
+        <result property="content"    column="content" />
+        <result property="tag"        column="tag" />
+        <result property="likes"      column="likes" />
+        <result property="dislikes"   column="dislikes" />
+        <result property="points"     column="points" />
+        <result property="status"     column="status" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <collection property="comments" ofType="com.ruoyi.community.domain.CommunityComment" column="post_id" select="com.ruoyi.community.mapper.CommunityCommentMapper.selectCommentsByPostId"/>
+    </resultMap>
+
+    <select id="selectPostList" parameterType="com.ruoyi.community.domain.CommunityPost" resultMap="CommunityPostResult">
+        select * from community_post where status = '0'
+        <if test="tag != null and tag != ''"> and tag = #{tag}</if>
+        order by create_time desc
+    </select>
+
+    <select id="selectPostById" parameterType="Long" resultMap="CommunityPostResult">
+        select * from community_post where post_id = #{postId} and status = '0'
+    </select>
+
+    <insert id="insertPost" parameterType="com.ruoyi.community.domain.CommunityPost" useGeneratedKeys="true" keyProperty="postId">
+        insert into community_post (user_id, user_name, content, tag, likes, dislikes, points, status)
+        values (#{userId}, #{userName}, #{content}, #{tag}, #{likes}, #{dislikes}, #{points}, '0')
+    </insert>
+
+    <update id="updatePost" parameterType="com.ruoyi.community.domain.CommunityPost">
+        UPDATE community_post
+        SET
+            likes = COALESCE(#{likes}, likes),
+            dislikes = COALESCE(#{dislikes}, dislikes),
+            content = COALESCE(#{content}, content),
+            tag = COALESCE(#{tag}, tag),
+            points = COALESCE(#{points}, points)
+        WHERE post_id = #{postId}
+    </update>
+
+    <update id="deletePostById">
+        update community_post set status = '1' where post_id = #{postId}
+    </update>
+
+    <update id="updateLike">
+        update community_post set likes = likes + 1 where post_id = #{postId} and status = '0'
+    </update>
+
+    <update id="updateDislike">
+        update community_post set dislikes = dislikes + 1 where post_id = #{postId} and status = '0'
+    </update>
+
+    <resultMap type="com.ruoyi.community.domain.CommunityComment" id="CommunityCommentResult">
+        <id     property="commentId" column="comment_id" />
+        <result property="postId"    column="post_id" />
+        <result property="userId"    column="user_id" />
+        <result property="userName"  column="user_name" />
+        <result property="content"   column="content" />
+        <result property="status"    column="status" />
+        <result property="createTime" column="create_time" />
+    </resultMap>
+
+    <insert id="insertComment" parameterType="com.ruoyi.community.domain.CommunityComment" useGeneratedKeys="true" keyProperty="commentId">
+        insert into community_comment (post_id, user_id, user_name, content, status)
+        values (#{postId}, #{userId}, #{userName}, #{content}, '0')
+    </insert>
+
+    <update id="deleteCommentById">
+        update community_comment set status = '1' where comment_id = #{commentId}
+    </update>
+</mapper>

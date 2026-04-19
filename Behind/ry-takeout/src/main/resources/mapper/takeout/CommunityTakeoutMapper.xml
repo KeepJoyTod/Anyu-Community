@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CommunityTakeoutMapper">
+    
+    <resultMap type="CommunityTakeout" id="CommunityTakeoutResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="userPhone"    column="user_phone"    />
+        <result property="userRoom"    column="user_room"    />
+        <result property="orderNo"    column="order_no"    />
+        <result property="shopName"    column="shop_name"    />
+        <result property="shopPhone"    column="shop_phone"    />
+        <result property="totalAmount"    column="total_amount"    />
+        <result property="deliveryFee"    column="delivery_fee"    />
+        <result property="actualAmount"    column="actual_amount"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="paymentMethod"    column="payment_method"    />
+        <result property="paymentTime"    column="payment_time"    />
+        <result property="deliveryTime"    column="delivery_time"    />
+        <result property="actualDeliveryTime"    column="actual_delivery_time"    />
+        <result property="deliveryAddress"    column="delivery_address"    />
+        <result property="remark"    column="remark"    />
+        <result property="cancelReason"    column="cancel_reason"    />
+        <result property="reservationId"    column="reservation_id"    />
+        <result property="complaintId"    column="complaint_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+
+
+    <select id="selectCommunityTakeoutList" parameterType="CommunityTakeout" resultMap="CommunityTakeoutResult">
+        SELECT id, user_id, user_name, user_phone, user_room, order_no, shop_name, shop_phone, total_amount, delivery_fee, actual_amount, order_status, payment_method, payment_time, delivery_time, actual_delivery_time, delivery_address, remark, cancel_reason, reservation_id, complaint_id, create_by, create_time, update_by, update_time
+        FROM community_takeout
+        WHERE user_id = #{userId}
+          AND user_name LIKE CONCAT('%', #{userName}, '%')
+          AND user_phone = #{userPhone}
+          AND user_room = #{userRoom}
+          AND order_no = #{orderNo}
+          AND shop_name LIKE CONCAT('%', #{shopName}, '%')
+          AND shop_phone = #{shopPhone}
+          AND total_amount = #{totalAmount}
+          AND delivery_fee = #{deliveryFee}
+          AND actual_amount = #{actualAmount}
+          AND order_status = #{orderStatus}
+          AND payment_method = #{paymentMethod}
+          AND payment_time = #{paymentTime}
+          AND delivery_time = #{deliveryTime}
+          AND actual_delivery_time = #{actualDeliveryTime}
+          AND delivery_address = #{deliveryAddress}
+          AND cancel_reason = #{cancelReason}
+          AND reservation_id = #{reservationId}
+          AND complaint_id = #{complaintId}
+    </select>
+    
+    <select id="selectCommunityTakeoutById" parameterType="Long" resultMap="CommunityTakeoutResult">
+        SELECT id, user_id, user_name, user_phone, user_room, order_no, shop_name, shop_phone, total_amount, delivery_fee, actual_amount, order_status, payment_method, payment_time, delivery_time, actual_delivery_time, delivery_address, remark, cancel_reason, reservation_id, complaint_id, create_by, create_time, update_by, update_time
+        FROM community_takeout
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insertCommunityTakeout" parameterType="CommunityTakeout" useGeneratedKeys="true" keyProperty="id">
+        insert into community_takeout (
+            user_id,
+            user_name,
+            user_phone,
+            user_room,
+            order_no,
+            shop_name,
+            shop_phone,
+            total_amount,
+            delivery_fee,
+            actual_amount,
+            order_status,
+            payment_method,
+            payment_time,
+            delivery_time,
+            actual_delivery_time,
+            delivery_address,
+            remark,
+            cancel_reason,
+            reservation_id,
+            complaint_id,
+            create_by,
+            create_time,
+            update_by,
+            update_time
+        ) values (
+                     #{userId},
+                     #{userName},
+                     #{userPhone},
+                     #{userRoom},
+                     #{orderNo},
+                     #{shopName},
+                     #{shopPhone},
+                     #{totalAmount},
+                     #{deliveryFee},
+                     #{actualAmount},
+                     #{orderStatus},
+                     #{paymentMethod},
+                     #{paymentTime},
+                     #{deliveryTime},
+                     #{actualDeliveryTime},
+                     #{deliveryAddress},
+                     #{remark},
+                     #{cancelReason},
+                     #{reservationId},
+                     #{complaintId},
+                     #{createBy},
+                     #{createTime},
+                     #{updateBy},
+                     #{updateTime}
+                 )
+    </insert>
+
+    <update id="updateCommunityTakeout" parameterType="CommunityTakeout">
+        update community_takeout
+        set
+            user_id = #{userId},
+            user_name = #{userName},
+            user_phone = #{userPhone},
+            user_room = #{userRoom},
+            order_no = #{orderNo},
+            shop_name = #{shopName},
+            shop_phone = #{shopPhone},
+            total_amount = #{totalAmount},
+            delivery_fee = #{deliveryFee},
+            actual_amount = #{actualAmount},
+            order_status = #{orderStatus},
+            payment_method = #{paymentMethod},
+            payment_time = #{paymentTime},
+            delivery_time = #{deliveryTime},
+            actual_delivery_time = #{actualDeliveryTime},
+            delivery_address = #{deliveryAddress},
+            remark = #{remark},
+            cancel_reason = #{cancelReason},
+            reservation_id = #{reservationId},
+            complaint_id = #{complaintId},
+            create_by = #{createBy},
+            create_time = #{createTime},
+            update_by = #{updateBy},
+            update_time = #{updateTime}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityTakeoutById" parameterType="Long">
+        delete from community_takeout where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityTakeoutByIds" parameterType="String">
+        delete from community_takeout where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

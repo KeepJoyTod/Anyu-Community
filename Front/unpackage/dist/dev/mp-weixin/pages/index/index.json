@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "社区服务",
+  "usingComponents": {
+    "community-map": "/components/CommunityMap"
+  }
+}
