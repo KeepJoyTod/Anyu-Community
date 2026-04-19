@@ -1,0 +1,27 @@
+# 后端编译与IDE缓存
+Behind/target/
+Behind/logs/
+Behind/.idea/
+Behind/*.iml
+Behind/ruoyi.ipr
+Behind/ruoyi.iws
+Behind/ruoyi-ui/node_modules/
+Behind/ruoyi-ui/dist/
+
+# 前端编译与IDE缓存
+Front/unpackage/
+Front/node_modules/
+Front/.hbuilderx/
+Front/.idea/
+Front/*.iml
+
+# 通用IDE与系统文件
+.idea/
+.vscode/
+*.suo
+*.ntvs
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
