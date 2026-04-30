@@ -19,6 +19,18 @@
     </select>
 
 
+    <select id="selectList" parameterType="com.ruoyi.domain.PackageEntity" resultMap="BaseResultMap">
+        SELECT * FROM packages
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="company != null and company != ''">and company like concat('%', #{company}, '%')</if>
+            <if test="pickupCode != null and pickupCode != ''">and pickup_code like concat('%', #{pickupCode}, '%')</if>
+            <if test="trackingNo != null and trackingNo != ''">and tracking_no like concat('%', #{trackingNo}, '%')</if>
+            <if test="arrivalTime != null">and date(arrival_time) = date(#{arrivalTime})</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+        ORDER BY arrival_time DESC
+    </select>
 
     <select id="selectPackageList" resultMap="BaseResultMap">
         SELECT * FROM packages ORDER BY arrival_time DESC LIMIT #{offset}, #{size}
@@ -33,14 +45,28 @@
     </select>
 
     <update id="updateById" parameterType="com.ruoyi.domain.PackageEntity">
-        UPDATE packages SET
-            company = #{company},
-            express_icon = #{expressIcon},
-            pickup_code = #{pickupCode},
-            tracking_no = #{trackingNo},
-            arrival_time = #{arrivalTime},
-            status = #{status}
+        UPDATE packages
+        <set>
+            <if test="company != null">company = #{company},</if>
+            <if test="expressIcon != null">express_icon = #{expressIcon},</if>
+            <if test="pickupCode != null">pickup_code = #{pickupCode},</if>
+            <if test="trackingNo != null">tracking_no = #{trackingNo},</if>
+            <if test="arrivalTime != null">arrival_time = #{arrivalTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </set>
         WHERE id = #{id}
     </update>
+
+    <insert id="insert" parameterType="com.ruoyi.domain.PackageEntity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO packages (company, express_icon, pickup_code, tracking_no, arrival_time, status)
+        VALUES (#{company}, #{expressIcon}, #{pickupCode}, #{trackingNo}, #{arrivalTime}, #{status})
+    </insert>
+
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        DELETE FROM packages WHERE id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>

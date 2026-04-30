@@ -14,6 +14,9 @@ import java.util.List;
 public interface VenueBookingMapper {
     int insert(VenueBooking venueBooking);
     List<VenueBooking> selectList();
+    List<VenueBooking> selectListByQuery(VenueBooking venueBooking);
     List<VenueBooking> selectByUserId(Long userId);
     VenueBooking selectById(Long id);
+    int updateById(VenueBooking venueBooking);
+    int deleteByIds(Long[] ids);
 }

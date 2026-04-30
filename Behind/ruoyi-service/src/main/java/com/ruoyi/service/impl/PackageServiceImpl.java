@@ -21,6 +21,11 @@ public class PackageServiceImpl implements IPackageService {
     private ITrackService trackService;
 
     @Override
+    public List<PackageEntity> listPackages(PackageEntity packageEntity) {
+        return packageMapper.selectList(packageEntity);
+    }
+
+    @Override
     public List<PackageEntity> getPackageList(int page, int size) {
         int offset = (page - 1) * size;
         return packageMapper.selectPackageList(offset, size);
@@ -63,5 +68,26 @@ public class PackageServiceImpl implements IPackageService {
     @Override
     public List<PackageEntity> getPendingPackages() {
         return packageMapper.selectPendingPackages();
+    }
+
+    @Override
+    public int savePackage(PackageEntity packageEntity) {
+        if (packageEntity.getArrivalTime() == null) {
+            packageEntity.setArrivalTime(LocalDateTime.now());
+        }
+        if (packageEntity.getStatus() == null) {
+            packageEntity.setStatus(2);
+        }
+        return packageMapper.insert(packageEntity);
+    }
+
+    @Override
+    public int updatePackage(PackageEntity packageEntity) {
+        return packageMapper.updateById(packageEntity);
+    }
+
+    @Override
+    public int deletePackagesByIds(Long[] ids) {
+        return packageMapper.deleteByIds(ids);
     }
 }

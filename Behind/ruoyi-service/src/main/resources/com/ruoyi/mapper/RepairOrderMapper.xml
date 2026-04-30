@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.mapper.RepairOrderMapper">
+    <resultMap id="RepairOrderResult" type="com.ruoyi.domain.RepairOrder">
+        <id property="orderId" column="order_id" />
+        <result property="repairId" column="repair_id" />
+        <result property="userId" column="user_id" />
+        <result property="userName" column="user_name" />
+        <result property="userRoom" column="user_room" />
+        <result property="userPhone" column="user_phone" />
+        <result property="repairType" column="repair_type" />
+        <result property="repairAddress" column="repair_address" />
+        <result property="repairDesc" column="repair_desc" />
+        <result property="repairImages" column="repair_images" />
+        <result property="orderStatus" column="order_status" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <sql id="selectRepairOrderVo">
+        select order_id, repair_id, user_id, user_name, user_room, user_phone,
+               repair_type, repair_address, repair_desc, repair_images,
+               order_status, create_time, update_time, remark
+        from community_repair_order
+    </sql>
+
+    <select id="selectRepairOrderList" parameterType="com.ruoyi.domain.RepairOrder" resultMap="RepairOrderResult">
+        <include refid="selectRepairOrderVo" />
+        <where>
+            <if test="repairId != null">and repair_id = #{repairId}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="userName != null and userName != ''">and user_name like concat('%', #{userName}, '%')</if>
+            <if test="userRoom != null and userRoom != ''">and user_room like concat('%', #{userRoom}, '%')</if>
+            <if test="userPhone != null and userPhone != ''">and user_phone like concat('%', #{userPhone}, '%')</if>
+            <if test="repairType != null and repairType != ''">and repair_type = #{repairType}</if>
+            <if test="repairAddress != null and repairAddress != ''">and repair_address like concat('%', #{repairAddress}, '%')</if>
+            <if test="repairDesc != null and repairDesc != ''">and repair_desc like concat('%', #{repairDesc}, '%')</if>
+            <if test="orderStatus != null and orderStatus != ''">and order_status = #{orderStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
     <!-- 新增维修订单 -->
     <insert id="insert" parameterType="com.ruoyi.domain.RepairOrder">
         insert into community_repair_order (
@@ -36,8 +75,8 @@
     </insert>
 
     <!-- 根据ID查询维修订单 -->
-    <select id="selectById" parameterType="java.lang.Long" resultType="com.ruoyi.domain.RepairOrder">
-        select * from community_repair_order where order_id = #{orderId}
+    <select id="selectById" parameterType="java.lang.Long" resultMap="RepairOrderResult">
+        <include refid="selectRepairOrderVo" /> where order_id = #{orderId}
     </select>
 
     <!-- 修改维修订单 -->
@@ -64,8 +103,15 @@
         delete from community_repair_order where order_id = #{orderId}
     </delete>
 
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from community_repair_order where order_id in
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+
     <!-- 查询待处理的维修订单列表 -->
-    <select id="selectPendingOrders" resultType="com.ruoyi.domain.RepairOrder">
-        select * from community_repair_order where order_status = 'pending' order by create_time desc
+    <select id="selectPendingOrders" resultMap="RepairOrderResult">
+        <include refid="selectRepairOrderVo" /> where order_status = 'pending' order by create_time desc
     </select>
 </mapper>

@@ -12,6 +12,11 @@ import java.util.List;
  */
 @Mapper
 public interface CommunityElectricityFeeMapper {
+    /**
+     * 查询电费账单列表
+     */
+    List<CommunityElectricityFee> selectCommunityElectricityFeeList(CommunityElectricityFee communityElectricityFee);
+
     
     /**
      * 根据用户ID查询电费账单列表
@@ -60,5 +65,7 @@ public interface CommunityElectricityFeeMapper {
      * @return 电费账单
      */
     CommunityElectricityFee selectById(Long electricityId);
+
+    int deleteCommunityElectricityFeeByIds(Long[] electricityIds);
     
 }

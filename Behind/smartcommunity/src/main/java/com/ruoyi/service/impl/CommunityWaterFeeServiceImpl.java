@@ -75,6 +75,11 @@ public class CommunityWaterFeeServiceImpl implements ICommunityWaterFeeService {
     }
 
     @Override
+    public List<CommunityWaterFee> selectCommunityWaterFeeList(CommunityWaterFee communityWaterFee) {
+        return communityWaterFeeMapper.selectCommunityWaterFeeListByQuery(communityWaterFee);
+    }
+
+    @Override
     public int updateCommunityWaterFee(CommunityWaterFee communityWaterFee) {
         return communityWaterFeeMapper.updateCommunityWaterFee(communityWaterFee);
     }
@@ -82,5 +87,10 @@ public class CommunityWaterFeeServiceImpl implements ICommunityWaterFeeService {
     @Override
     public int insertCommunityWaterFee(CommunityWaterFee communityWaterFee) {
         return communityWaterFeeMapper.insertCommunityWaterFee(communityWaterFee);
+    }
+
+    @Override
+    public int deleteCommunityWaterFeeByIds(Long[] waterIds) {
+        return communityWaterFeeMapper.deleteCommunityWaterFeeByIds(waterIds);
     }
 }

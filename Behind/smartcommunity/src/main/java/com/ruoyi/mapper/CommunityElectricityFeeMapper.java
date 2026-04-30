@@ -16,6 +16,8 @@ import java.util.List;
  */
 @Mapper
 public interface CommunityElectricityFeeMapper extends BaseMapper<CommunityElectricityFee> {
+    List<CommunityElectricityFee> selectCommunityElectricityFeeList(CommunityElectricityFee communityElectricityFee);
+
 
     List<CommunityElectricityFee> selectByUserId(Long userId);
 
@@ -28,5 +30,7 @@ public interface CommunityElectricityFeeMapper extends BaseMapper<CommunityElect
     int insert(CommunityElectricityFee communityElectricityFee);
 
     CommunityElectricityFee selectById(Long electricityId);
+
+    int deleteCommunityElectricityFeeByIds(Long[] electricityIds);
 
 }

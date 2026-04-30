@@ -1,160 +1,312 @@
 package com.ruoyi.web.controller.service;
 
+import com.ruoyi.common.config.RuoYiConfig;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.file.FileUploadUtils;
+import com.ruoyi.common.utils.file.MimeTypeUtils;
 import com.ruoyi.domain.RepairOrder;
 import com.ruoyi.service.IRepairOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/repairs")
-@CrossOrigin
-public class RepairController {
+public class RepairController extends BaseController
+{
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^1[3-9]\\d{9}$");
+
     @Autowired
     private IRepairOrderService repairOrderService;
-    private DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     @PostMapping
-    public Map<String, Object> create(@RequestBody Map<String, Object> body) {
-        RepairOrder o = new RepairOrder();
-        // 设置默认值，确保不会为null
-        o.setRepairId(0L);
-        o.setUserId(0L);
-        o.setUserRoom("");
-        o.setRepairType(asText(body.get("repairType")));
-        o.setRepairDesc(asText(body.get("repairDesc")));
-        o.setUserName(asText(body.get("userName")));
-        o.setUserPhone(asText(body.get("userPhone")));
-        o.setRepairAddress(asText(body.get("repairAddress")));
-        o.setRepairImages(asText(body.get("repairImages")));
-        o.setOrderStatus(asText(body.get("orderStatus")));
-        o.setCreateTime(LocalDateTime.now());
-        o.setUpdateTime(LocalDateTime.now());
-        repairOrderService.insertRepairOrder(o);
-        return ok(toMap(o));
+    public AjaxResult create(@RequestBody RepairCreateRequest request)
+    {
+        if (request == null)
+        {
+            return AjaxResult.error("请求体不能为空");
+        }
+        if (!StringUtils.hasText(request.getRepairType()))
+        {
+            return AjaxResult.error("报修类型不能为空");
+        }
+        if (!StringUtils.hasText(request.getRepairAddress()))
+        {
+            return AjaxResult.error("报修地址不能为空");
+        }
+        if (!StringUtils.hasText(request.getRepairDesc()))
+        {
+            return AjaxResult.error("问题描述不能为空");
+        }
+        if (StringUtils.hasText(request.getUserPhone()) && !PHONE_PATTERN.matcher(request.getUserPhone().trim()).matches())
+        {
+            return AjaxResult.error("联系电话格式不正确");
+        }
+
+        SysUser currentUser = getLoginUser().getUser();
+        LocalDateTime now = LocalDateTime.now();
+
+        RepairOrder order = new RepairOrder();
+        order.setRepairId(request.getRepairId() == null ? 0L : request.getRepairId());
+        order.setUserId(currentUser.getUserId());
+        order.setUserName(StringUtils.defaultIfBlank(currentUser.getNickName(), currentUser.getUserName()));
+        order.setUserRoom(StringUtils.defaultIfBlank(request.getUserRoom(), String.valueOf(currentUser.getUserId())));
+        order.setUserPhone(StringUtils.defaultIfBlank(StringUtils.trim(request.getUserPhone()), currentUser.getPhonenumber()));
+        order.setRepairType(StringUtils.trim(request.getRepairType()));
+        order.setRepairAddress(StringUtils.trim(request.getRepairAddress()));
+        order.setRepairDesc(StringUtils.trim(request.getRepairDesc()));
+        order.setRepairImages(StringUtils.trim(request.getRepairImages()));
+        order.setOrderStatus("pending");
+        order.setRemark(StringUtils.trim(request.getRemark()));
+        order.setCreateTime(now);
+        order.setUpdateTime(now);
+
+        repairOrderService.insertRepairOrder(order);
+        return AjaxResult.success(toView(order));
     }
 
     @GetMapping
-    public Map<String, Object> list() {
-        return ok(Collections.emptyList());
+    public AjaxResult list()
+    {
+        return AjaxResult.success(Collections.emptyList());
     }
 
     @GetMapping("/pending")
-    public Map<String, Object> pending() {
+    public AjaxResult pending()
+    {
         List<RepairOrder> orders = repairOrderService.selectPendingRepairOrders();
         List<Map<String, Object>> result = new ArrayList<>();
-        for (RepairOrder order : orders) {
-            result.add(toMap(order));
+        Long currentUserId = getUserId();
+        boolean admin = SecurityUtils.isAdmin(currentUserId);
+        for (RepairOrder order : orders)
+        {
+            if (admin || Objects.equals(order.getUserId(), currentUserId))
+            {
+                result.add(toView(order));
+            }
         }
-        return ok(result);
+        return AjaxResult.success(result);
     }
 
     @GetMapping("/{orderId}")
-    public Map<String, Object> detail(@PathVariable Long orderId) {
-        RepairOrder o = repairOrderService.selectRepairOrderById(orderId);
-        if (o == null) return fail(404, "工单不存在");
-        return ok(toMap(o));
+    public AjaxResult detail(@PathVariable Long orderId)
+    {
+        RepairOrder order = repairOrderService.selectRepairOrderById(orderId);
+        if (order == null)
+        {
+            return AjaxResult.error(404, "工单不存在");
+        }
+        Long currentUserId = getUserId();
+        if (!SecurityUtils.isAdmin(currentUserId) && !Objects.equals(order.getUserId(), currentUserId))
+        {
+            return AjaxResult.error(403, "无权访问该工单");
+        }
+        return AjaxResult.success(toView(order));
     }
 
     @PutMapping("/{orderId}/cancel")
-    public Map<String, Object> cancel(@PathVariable Long orderId) {
-        int result = repairOrderService.cancelRepairOrder(orderId);
-        if (result == 0) {
-            RepairOrder o = repairOrderService.selectRepairOrderById(orderId);
-            if (o == null) return fail(404, "工单不存在");
+    public AjaxResult cancel(@PathVariable Long orderId)
+    {
+        RepairOrder order = repairOrderService.selectRepairOrderById(orderId);
+        if (order == null)
+        {
+            return AjaxResult.error(404, "工单不存在");
         }
-        RepairOrder o = repairOrderService.selectRepairOrderById(orderId);
-        return ok(Collections.singletonMap("status", o.getOrderStatus()));
+        Long currentUserId = getUserId();
+        if (!SecurityUtils.isAdmin(currentUserId) && !Objects.equals(order.getUserId(), currentUserId))
+        {
+            return AjaxResult.error(403, "无权取消该工单");
+        }
+        if (!"pending".equals(order.getOrderStatus()))
+        {
+            return AjaxResult.error("当前状态不可取消");
+        }
+
+        int result = repairOrderService.cancelRepairOrder(orderId);
+        if (result <= 0)
+        {
+            return AjaxResult.error("取消报修失败");
+        }
+
+        RepairOrder updated = repairOrderService.selectRepairOrderById(orderId);
+        return AjaxResult.success(Collections.singletonMap("status", updated == null ? "canceled" : updated.getOrderStatus()));
     }
 
     @PostMapping("/upload")
-    public Map<String, Object> upload(@RequestPart("file") MultipartFile file) throws IOException {
-        if (file.isEmpty()) return fail(400, "文件为空");
-        Path root = Paths.get("uploads", "repair");
-        Files.createDirectories(root);
-        String ext = getExt(Objects.requireNonNull(file.getOriginalFilename()));
-        String name = System.currentTimeMillis() + "-" + UUID.randomUUID() + (ext.isEmpty()? "" : ("."+ext));
-        Path dest = root.resolve(name);
-        file.transferTo(dest.toFile());
-        String url = "/uploads/repair/" + name;
-        Map<String, Object> data = new HashMap<>();
-        data.put("url", url);
-        return ok(data);
-    }
-
-    private String getExt(String filename) {
-        int i = filename.lastIndexOf('.');
-        return i >= 0 ? filename.substring(i+1) : "";
-    }
-
-    private String toJsonArrayString(Collection<?> list) {
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        boolean first = true;
-        for (Object o : list) {
-            if (!first) sb.append(',');
-            first = false;
-            sb.append('"').append(String.valueOf(o).replace("\"","\\\"")).append('"');
+    public AjaxResult upload(@RequestPart("file") MultipartFile file)
+    {
+        if (file == null || file.isEmpty())
+        {
+            return AjaxResult.error("上传文件不能为空");
         }
-        sb.append(']');
-        return sb.toString();
+        try
+        {
+            String fileUrl = FileUploadUtils.upload(RuoYiConfig.getUploadPath() + "/repair", file, MimeTypeUtils.IMAGE_EXTENSION, true);
+            Map<String, Object> data = new LinkedHashMap<>();
+            data.put("url", fileUrl);
+            return AjaxResult.success(data);
+        }
+        catch (Exception e)
+        {
+            return AjaxResult.error("文件上传失败: " + e.getMessage());
+        }
     }
 
-    private String asText(Object v) { return v == null ? null : String.valueOf(v); }
-
-    private Map<String, Object> toMap(RepairOrder o) {
-        Map<String, Object> m = new LinkedHashMap<>();
-        m.put("orderId", o.getOrderId());
-        m.put("type", o.getRepairType());
-        m.put("desc", o.getRepairDesc());
-        m.put("contactName", o.getUserName());
-        m.put("phone", o.getUserPhone());
-        m.put("address", o.getRepairAddress());
-        m.put("images", parseImages(o.getRepairImages()));
-        m.put("status", o.getOrderStatus());
-        m.put("createdAt", o.getCreateTime() == null ? null : o.getCreateTime().format(fmt));
-        return m;
+    private Map<String, Object> toView(RepairOrder order)
+    {
+        Map<String, Object> view = new LinkedHashMap<>();
+        view.put("orderId", order.getOrderId());
+        view.put("type", order.getRepairType());
+        view.put("desc", order.getRepairDesc());
+        view.put("contactName", order.getUserName());
+        view.put("phone", order.getUserPhone());
+        view.put("address", order.getRepairAddress());
+        view.put("images", parseImages(order.getRepairImages()));
+        view.put("status", order.getOrderStatus());
+        view.put("createdAt", order.getCreateTime() == null ? null : order.getCreateTime().format(FORMATTER));
+        return view;
     }
 
-    private List<String> parseImages(String json) {
-        if (!StringUtils.hasText(json)) return Collections.emptyList();
-        String s = json.trim();
-        if (s.startsWith("[") && s.endsWith("]")) {
-            s = s.substring(1, s.length()-1).trim();
-            if (s.isEmpty()) return Collections.emptyList();
-            List<String> list = new ArrayList<>();
-            for (String part : s.split(",")) {
-                String p = part.trim();
-                if (p.startsWith("\"") && p.endsWith("\"")) p = p.substring(1, p.length()-1);
-                list.add(p.replace("\\\"", "\""));
+    private List<String> parseImages(String rawImages)
+    {
+        if (!StringUtils.hasText(rawImages))
+        {
+            return Collections.emptyList();
+        }
+        String value = rawImages.trim();
+        if (value.startsWith("[") && value.endsWith("]"))
+        {
+            value = value.substring(1, value.length() - 1).trim();
+            if (!StringUtils.hasText(value))
+            {
+                return Collections.emptyList();
             }
-            return list;
+            List<String> images = new ArrayList<>();
+            for (String part : value.split(","))
+            {
+                String image = part.trim();
+                if (image.startsWith("\"") && image.endsWith("\"") && image.length() >= 2)
+                {
+                    image = image.substring(1, image.length() - 1);
+                }
+                images.add(image.replace("\\\"", "\""));
+            }
+            return images;
         }
-        return Arrays.asList(s.split(","));
+        return StringUtils.str2List(value, ",", true, true);
     }
 
-    private Map<String, Object> ok(Object data) {
-        Map<String, Object> r = new HashMap<>();
-        r.put("code", 200);
-        r.put("msg", "OK");
-        r.put("data", data);
-        return r;
-    }
+    public static class RepairCreateRequest
+    {
+        private Long repairId;
+        private String userPhone;
+        private String userRoom;
+        private String repairType;
+        private String repairAddress;
+        private String repairDesc;
+        private String repairImages;
+        private String remark;
 
-    private Map<String, Object> fail(int code, String msg) {
-        Map<String, Object> r = new HashMap<>();
-        r.put("code", code);
-        r.put("msg", msg);
-        return r;
+        public Long getRepairId()
+        {
+            return repairId;
+        }
+
+        public void setRepairId(Long repairId)
+        {
+            this.repairId = repairId;
+        }
+
+        public String getUserPhone()
+        {
+            return userPhone;
+        }
+
+        public void setUserPhone(String userPhone)
+        {
+            this.userPhone = userPhone;
+        }
+
+        public String getUserRoom()
+        {
+            return userRoom;
+        }
+
+        public void setUserRoom(String userRoom)
+        {
+            this.userRoom = userRoom;
+        }
+
+        public String getRepairType()
+        {
+            return repairType;
+        }
+
+        public void setRepairType(String repairType)
+        {
+            this.repairType = repairType;
+        }
+
+        public String getRepairAddress()
+        {
+            return repairAddress;
+        }
+
+        public void setRepairAddress(String repairAddress)
+        {
+            this.repairAddress = repairAddress;
+        }
+
+        public String getRepairDesc()
+        {
+            return repairDesc;
+        }
+
+        public void setRepairDesc(String repairDesc)
+        {
+            this.repairDesc = repairDesc;
+        }
+
+        public String getRepairImages()
+        {
+            return repairImages;
+        }
+
+        public void setRepairImages(String repairImages)
+        {
+            this.repairImages = repairImages;
+        }
+
+        public String getRemark()
+        {
+            return remark;
+        }
+
+        public void setRemark(String remark)
+        {
+            this.remark = remark;
+        }
     }
 }
-

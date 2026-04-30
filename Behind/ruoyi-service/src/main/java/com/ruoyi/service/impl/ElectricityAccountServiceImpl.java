@@ -1,7 +1,9 @@
 package com.ruoyi.service.impl;
 
+import com.ruoyi.domain.CommunityElectricityFee;
 import com.ruoyi.domain.ElectricityAccount;
 import com.ruoyi.domain.ElectricityRechargeRecord;
+import com.ruoyi.mapper.CommunityElectricityFeeMapper;
 import com.ruoyi.mapper.ElectricityAccountMapper;
 import com.ruoyi.mapper.ElectricityRechargeRecordMapper;
 import com.ruoyi.service.ElectricityAccountService;
@@ -11,7 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Service
 public class ElectricityAccountServiceImpl implements ElectricityAccountService {
@@ -21,6 +26,9 @@ public class ElectricityAccountServiceImpl implements ElectricityAccountService 
 
     @Autowired
     private ElectricityAccountMapper electricityAccountMapper;
+
+    @Autowired
+    private CommunityElectricityFeeMapper communityElectricityFeeMapper;
 
     // 假设电费单价为 0.54元/度
     private static final BigDecimal ELECTRICITY_PRICE_PER_UNIT = new BigDecimal("0.54");
@@ -66,6 +74,37 @@ public class ElectricityAccountServiceImpl implements ElectricityAccountService 
         account.setElectricityAmount(account.getElectricityAmount().add(electricityAdded));
         account.setUpdateTime(LocalDateTime.now());
         
-        return electricityAccountMapper.updateById(account) > 0;
+        boolean updated = electricityAccountMapper.updateById(account) > 0;
+        if (updated) {
+            savePaidFeeRecord(userId, amount, electricityAdded, payMethod, account);
+        }
+        return updated;
+    }
+
+    private void savePaidFeeRecord(Long userId, BigDecimal amount, BigDecimal electricityAdded, String payMethod, ElectricityAccount account) {
+        LocalDateTime now = LocalDateTime.now();
+        CommunityElectricityFee fee = new CommunityElectricityFee();
+        fee.setUserId(userId);
+        fee.setUserName("user-" + userId);
+        fee.setUserRoom(String.valueOf(userId));
+        fee.setReadMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")));
+        fee.setLastReading(BigDecimal.ZERO);
+        fee.setCurrentReading(electricityAdded);
+        fee.setUsedAmount(electricityAdded);
+        fee.setUnitPrice(ELECTRICITY_PRICE_PER_UNIT);
+        fee.setTotalFee(amount);
+        fee.setBalance(account.getBalance());
+        fee.setSurplusElectricity(account.getElectricityAmount().doubleValue());
+        fee.setFeeStatus("paid");
+        fee.setDueDate(now);
+        fee.setPaymentTime(now);
+        fee.setPaymentNo("E" + UUID.randomUUID().toString().replace("-", ""));
+        fee.setOverdueAmount(BigDecimal.ZERO);
+        fee.setReader("system");
+        fee.setReadTime(now);
+        fee.setCreateTime(now);
+        fee.setUpdateTime(now);
+        fee.setRemark("recharge:" + payMethod);
+        communityElectricityFeeMapper.insert(fee);
     }
 }

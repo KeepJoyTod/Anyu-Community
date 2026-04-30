@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import config from '@/api/config.js'
+
 export default {
   data() {
     return {
@@ -65,7 +67,7 @@ export default {
 		      }
 		const token = uni.getStorageSync('community_token')
       uni.request({
-        url: 'http://localhost:8080/signup/submit',
+        url: config.resolveUrl('/signup/submit'),
         method: 'POST',
 		header: {
 			'Content-Type': 'application/json',

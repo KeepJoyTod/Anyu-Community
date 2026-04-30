@@ -17,7 +17,9 @@ import java.util.List;
 public interface CommunityWaterFeeMapper {
     List<CommunityWaterFee> selectCommunityWaterFeeByUserId(Long userId);
     List<CommunityWaterFee> selectCommunityWaterFeeList();
+    List<CommunityWaterFee> selectCommunityWaterFeeListByQuery(CommunityWaterFee communityWaterFee);
     CommunityWaterFee selectCommunityWaterFeeById(Long waterId);
     int updateCommunityWaterFee(CommunityWaterFee communityWaterFee);
     int insertCommunityWaterFee(CommunityWaterFee communityWaterFee);
+    int deleteCommunityWaterFeeByIds(Long[] waterIds);
 }

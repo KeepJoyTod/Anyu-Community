@@ -158,6 +158,8 @@
 </template>
 
 <script>
+import config from '@/api/config.js'
+
 export default {
   data() {
     return {
@@ -223,7 +225,7 @@ export default {
       
       // 调用后端API
       uni.request({
-        url: 'http://localhost:8080/community/donation/create',
+        url: config.resolveUrl('/community/donation/create'),
         method: 'POST',
         header: {
           'Content-Type': 'application/json'
@@ -303,7 +305,7 @@ export default {
       if (this.donateInfo.image.startsWith('http')) {
         return this.donateInfo.image;
       }
-      return 'http://127.0.0.1:8080' + this.donateInfo.image;
+      return config.resolveUrl(this.donateInfo.image);
     }
   }
 }

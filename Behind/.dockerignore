@@ -1,0 +1,7 @@
+.git
+.idea
+**/target
+**/logs
+ruoyi-ui/node_modules
+ruoyi-ui/dist
+doc

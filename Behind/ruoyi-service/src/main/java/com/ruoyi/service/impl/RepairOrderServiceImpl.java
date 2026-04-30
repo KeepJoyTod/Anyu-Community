@@ -18,6 +18,11 @@ public class RepairOrderServiceImpl implements IRepairOrderService {
     private RepairOrderMapper repairOrderMapper;
 
     @Override
+    public List<RepairOrder> selectRepairOrderList(RepairOrder repairOrder) {
+        return repairOrderMapper.selectRepairOrderList(repairOrder);
+    }
+
+    @Override
     public RepairOrder selectRepairOrderById(Long orderId) {
         return repairOrderMapper.selectById(orderId);
     }
@@ -35,6 +40,11 @@ public class RepairOrderServiceImpl implements IRepairOrderService {
     @Override
     public int deleteRepairOrderById(Long orderId) {
         return repairOrderMapper.deleteById(orderId);
+    }
+
+    @Override
+    public int deleteRepairOrderByIds(Long[] orderIds) {
+        return repairOrderMapper.deleteByIds(orderIds);
     }
 
     @Override

@@ -37,6 +37,9 @@ public class FeedbackController
             // 默认状态和类型
             complaint.setComplaintStatus("pending");
             complaint.setComplaintType("service");
+            Date now = new Date();
+            complaint.setCreateTime(now);
+            complaint.setUpdateTime(now);
             complaintService.save(complaint);
             return AjaxResult.success();
         } catch (Exception e) {
@@ -68,7 +71,27 @@ public class FeedbackController
             suggestion.setUserId(currentUser.getUserId());
             suggestion.setUserName(currentUser.getNickName());
             suggestion.setStatus("0");
-            suggestionService.save(suggestion);
+            Date now = new Date();
+            suggestion.setCreateTime(now);
+            suggestion.setUpdateTime(now);
+            if (!suggestionService.save(suggestion)) {
+                return AjaxResult.error("提交建议失败");
+            }
+
+            CommunityComplaint mirror = new CommunityComplaint();
+            mirror.setUserId(currentUser.getUserId());
+            mirror.setUserName(currentUser.getNickName());
+            mirror.setUserPhone(suggestion.getUserPhone());
+            mirror.setComplaintTitle(suggestion.getTitle());
+            mirror.setComplaintContent(suggestion.getContent());
+            mirror.setComplaintType("suggestion");
+            mirror.setComplaintStatus("pending");
+            mirror.setCreateTime(now);
+            mirror.setUpdateTime(now);
+            mirror.setRemark("synced_from_suggestion");
+            if (!complaintService.save(mirror)) {
+                return AjaxResult.error("建议已保存，但同步到管理端失败");
+            }
             return AjaxResult.success();
         } catch (Exception e) {
             e.printStackTrace();

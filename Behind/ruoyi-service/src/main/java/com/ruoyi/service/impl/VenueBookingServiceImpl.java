@@ -9,44 +9,51 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * 场地预约服务实现类
- *
- * @author ruoyi
- */
 @Service
 public class VenueBookingServiceImpl implements IVenueBookingService {
-    
+
     @Autowired
     private VenueBookingMapper venueBookingMapper;
-    
+
     @Override
     public boolean createBooking(VenueBooking venueBooking) {
-        // 设置默认预约状态为"待使用"
-        venueBooking.setStatus("待使用");
-        // 设置创建时间和更新时间
+        if (venueBooking.getStatus() == null || venueBooking.getStatus().isEmpty()) {
+            venueBooking.setStatus("\u5f85\u4f7f\u7528");
+        }
         LocalDateTime now = LocalDateTime.now();
         venueBooking.setCreateTime(now);
         venueBooking.setUpdateTime(now);
-        // 使用实际的数据库操作保存预约信息
         return venueBookingMapper.insert(venueBooking) > 0;
     }
 
     @Override
     public List<VenueBooking> getBookingsByUserId(Long userId) {
-        // 使用实际的数据库操作获取用户的预约列表
         return venueBookingMapper.selectByUserId(userId);
     }
 
     @Override
     public List<VenueBooking> listBookings() {
-        // 使用实际的数据库操作获取所有预约列表
         return venueBookingMapper.selectList();
     }
 
     @Override
+    public List<VenueBooking> listBookings(VenueBooking venueBooking) {
+        return venueBookingMapper.selectListByQuery(venueBooking);
+    }
+
+    @Override
     public VenueBooking getBookingById(Long id) {
-        // 使用实际的数据库操作获取预约详情
         return venueBookingMapper.selectById(id);
+    }
+
+    @Override
+    public int updateBooking(VenueBooking venueBooking) {
+        venueBooking.setUpdateTime(LocalDateTime.now());
+        return venueBookingMapper.updateById(venueBooking);
+    }
+
+    @Override
+    public int deleteBookingsByIds(Long[] ids) {
+        return venueBookingMapper.deleteByIds(ids);
     }
 }

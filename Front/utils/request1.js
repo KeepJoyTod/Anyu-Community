@@ -1,14 +1,11 @@
 import {getToken} from './auth'
 import axios from 'axios'
 import config from '@/api/config.js'
-// utils/request.js
-const BASE_URL = 'http://localhost:8080'
 
 export const request = (options) => {
 	return new Promise((resolve, reject) => {
 		const token = uni.getStorageSync(config.TOKEN_KEY);
-		const isAbsolute = /^https?:\/\//i.test(options.url)
-		const finalUrl = isAbsolute ? options.url : `${BASE_URL}${options.url}`
+		const finalUrl = config.resolveUrl(options.url)
 		uni.request({
 			url: finalUrl,
 			method: options.method || 'GET',

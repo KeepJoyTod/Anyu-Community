@@ -1,3 +1,5 @@
+import config from './config'
+
 export default {
   data() {
     return {
@@ -45,8 +47,8 @@ export default {
     toggleRegister() {
       const isRegister = !this.hasRegistered;
       const url = isRegister
-        ? "http://127.0.0.1:8080/community/activity/register"
-        : "http://127.0.0.1:8080/community/activity/cancelRegister";
+        ? config.resolveUrl('/community/activity/register')
+        : config.resolveUrl('/community/activity/cancelRegister');
 
       // 获取token
       const token = uni.getStorageSync('community_token');
@@ -84,7 +86,7 @@ export default {
               
               // 完成活动报名任务
               uni.request({
-                  url: 'http://127.0.0.1:8080/community/task/complete/activity',
+                  url: config.resolveUrl('/community/task/complete/activity'),
                   method: 'POST',
                   header: {
                     'Authorization': 'Bearer ' + token

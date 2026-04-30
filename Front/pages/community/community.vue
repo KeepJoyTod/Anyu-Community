@@ -413,6 +413,7 @@
 		communityApi,
 		pointsApi
 	} from '../../api/index.js'
+	import config from '../../api/config.js'
 
 	export default {
 		data() {
@@ -901,7 +902,7 @@
 				this.loading = true;
 
 				uni.request({
-					url: "http://127.0.0.1:8080/community/activity/list",
+					url: config.resolveUrl('/community/activity/list'),
 					method: "GET",
 					header: {
 						'Content-Type': 'application/json'
@@ -959,7 +960,7 @@
 				this.loading = true;
 
 				uni.request({
-					url: "http://127.0.0.1:8080/community/share/list",
+					url: config.resolveUrl('/community/share/list'),
 					method: "GET",
 					header: {
 						'Content-Type': 'application/json'
@@ -1013,7 +1014,7 @@
 				this.loading = true;
 
 				uni.request({
-					url: "http://127.0.0.1:8080/community/donation/list",
+					url: config.resolveUrl('/community/donation/list'),
 					method: "GET",
 					header: {
 						'Content-Type': 'application/json'
@@ -1118,7 +1119,7 @@
 				if (item.image.startsWith('http')) {
 					return item.image;
 				}
-				return 'http://127.0.0.1:8080' + item.image;
+				return config.resolveUrl(item.image);
 			},
 			onDonateImgError(index) {
 				this.$set(this.donateImgErrors, index, true);
@@ -1170,7 +1171,7 @@
 					const token = uni.getStorageSync('community_token')
 					if (token) {
 						uni.request({
-							url: 'http://127.0.0.1:8080/home/points/add',
+							url: config.resolveUrl('/home/points/add'),
 							method: 'POST',
 							header: {
 								'Content-Type': 'application/json',
@@ -1323,7 +1324,7 @@
 				try {
 					// 1. 发表分享
 					const publishRes = await this.request({
-						url: 'http://127.0.0.1:8080/community/post',
+						url: config.resolveUrl('/community/post'),
 						method: 'POST',
 						data: {
 							content: this.publishContent.trim(),
@@ -1338,7 +1339,7 @@
 					if (publishRes.data.code === 200) {
 						// 2. 完成发帖任务
 						const taskRes = await this.request({
-							url: 'http://127.0.0.1:8080/community/task/complete/post',
+							url: config.resolveUrl('/community/task/complete/post'),
 							method: 'POST',
 							header: {
 								'Authorization': 'Bearer ' + token

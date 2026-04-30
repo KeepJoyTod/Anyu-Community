@@ -300,6 +300,8 @@
 </template>
 
 <script>
+  import config from '@/api/config.js'
+
   export default {
     data() {
       return {
@@ -352,7 +354,7 @@
 
         try {
           const res = await this.request({
-            url: 'http://127.0.0.1:8080/community/task/category',
+            url: config.resolveUrl('/community/task/category'),
             method: 'GET',
             header: {
               'Authorization': 'Bearer ' + token
@@ -377,7 +379,7 @@
 
         try {
           const res = await this.request({
-            url: 'http://127.0.0.1:8080/community/task/hasSignin',
+            url: config.resolveUrl('/community/task/hasSignin'),
             method: 'GET',
             header: {
               'Authorization': 'Bearer ' + token
@@ -419,7 +421,7 @@
 
         try {
           const res = await this.request({
-            url: 'http://127.0.0.1:8080/community/task/signin',
+            url: config.resolveUrl('/community/task/signin'),
             method: 'POST',
             header: {
               'Authorization': 'Bearer ' + token
@@ -562,7 +564,7 @@
 
         try {
           const res = await this.request({
-            url: `http://127.0.0.1:8080/community/task/complete/${task.taskAction}`,
+            url: config.resolveUrl(`/community/task/complete/${task.taskAction}`),
             method: 'POST',
             header: {
               'Authorization': 'Bearer ' + token

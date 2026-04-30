@@ -29,16 +29,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectCommunityComplaintList" parameterType="CommunityComplaint" resultMap="CommunityComplaintResult">
         SELECT id, user_id, user_name, user_phone, complaint_title, complaint_content, complaint_type, complaint_status, handle_user_id, handle_user_name, handle_result, handle_time, create_by, create_time, update_by, update_time, remark
         FROM community_complaint
-        WHERE user_name LIKE CONCAT('%', #{userName}, '%')
-          AND user_phone = #{userPhone}
-          AND complaint_title LIKE CONCAT('%', #{complaintTitle}, '%')
-          AND complaint_content LIKE CONCAT('%', #{complaintContent}, '%')
-          AND complaint_type = #{complaintType}
-          AND complaint_status = #{complaintStatus}
-          AND handle_user_id = #{handleUserId}
-          AND handle_user_name LIKE CONCAT('%', #{handleUserName}, '%')
-          AND handle_result = #{handleResult}
-          AND handle_time = #{handleTime}
+        <where>
+            <if test="userName != null and userName != ''">and user_name LIKE CONCAT('%', #{userName}, '%')</if>
+            <if test="userPhone != null and userPhone != ''">and user_phone = #{userPhone}</if>
+            <if test="complaintTitle != null and complaintTitle != ''">and complaint_title LIKE CONCAT('%', #{complaintTitle}, '%')</if>
+            <if test="complaintContent != null and complaintContent != ''">and complaint_content LIKE CONCAT('%', #{complaintContent}, '%')</if>
+            <if test="complaintType != null and complaintType != ''">and complaint_type = #{complaintType}</if>
+            <if test="complaintStatus != null and complaintStatus != ''">and complaint_status = #{complaintStatus}</if>
+            <if test="handleUserId != null">and handle_user_id = #{handleUserId}</if>
+            <if test="handleUserName != null and handleUserName != ''">and handle_user_name LIKE CONCAT('%', #{handleUserName}, '%')</if>
+            <if test="handleResult != null and handleResult != ''">and handle_result = #{handleResult}</if>
+            <if test="handleTime != null">and handle_time = #{handleTime}</if>
+        </where>
+        order by create_time desc
     </select>
     
     <select id="selectCommunityComplaintById" parameterType="Long" resultMap="CommunityComplaintResult">

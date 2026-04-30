@@ -9,6 +9,11 @@ import java.util.List;
 @Service
 public interface IPackageService {
     /**
+     * 按条件查询快递列表
+     */
+    List<PackageEntity> listPackages(PackageEntity packageEntity);
+
+    /**
      * 获取快递列表（分页）
      */
     List<PackageEntity> getPackageList(int page, int size);
@@ -37,4 +42,10 @@ public interface IPackageService {
      * 获取待取件列表
      */
     List<PackageEntity> getPendingPackages();
+
+    int savePackage(PackageEntity packageEntity);
+
+    int updatePackage(PackageEntity packageEntity);
+
+    int deletePackagesByIds(Long[] ids);
 }

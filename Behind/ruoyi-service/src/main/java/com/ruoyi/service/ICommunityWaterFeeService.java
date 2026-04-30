@@ -45,6 +45,13 @@ public interface ICommunityWaterFeeService {
      * @return 水费信息列表
      */
     List<CommunityWaterFee> selectCommunityWaterFeeList();
+
+    /**
+     * 按条件查询水费信息列表
+     * @param communityWaterFee 查询条件
+     * @return 水费信息列表
+     */
+    List<CommunityWaterFee> selectCommunityWaterFeeList(CommunityWaterFee communityWaterFee);
     
     /**
      * 更新水费信息
@@ -59,4 +66,11 @@ public interface ICommunityWaterFeeService {
      * @return 插入结果
      */
     int insertCommunityWaterFee(CommunityWaterFee communityWaterFee);
+
+    /**
+     * 批量删除水费信息
+     * @param waterIds 水费ID数组
+     * @return 删除结果
+     */
+    int deleteCommunityWaterFeeByIds(Long[] waterIds);
 }

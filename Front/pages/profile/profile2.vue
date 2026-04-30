@@ -101,6 +101,7 @@
 
 <script>
 	import request from '../../api/request';
+	import config from '@/api/config.js'
 	export default {
 		data() {
 			return {
@@ -138,7 +139,7 @@
 				console.log("👉 发起用户信息GET请求");
 
 				uni.request({
-					url: "http://localhost:8080/user/user?username=" + username,
+					url: config.resolveUrl('/user/user') + '?username=' + encodeURIComponent(username || ''),
 					method: "GET",
 					header: {
 						'Content-Type': 'application/json',
@@ -218,7 +219,7 @@
 				const token = uni.getStorageSync('community_token')
 				console.log("👉 点击了我的积分")
 				uni.request({
-					url: "http://localhost:8080/point/myPoints?username=" + username,
+					url: config.resolveUrl('/point/myPoints') + '?username=' + encodeURIComponent(username || ''),
 					method: "GET",
 					header: {
 						'Content-Type': 'application/json',
@@ -241,7 +242,7 @@
 				const token = uni.getStorageSync('community_token')
 				console.log("👉 点击了勋章馆")
 				uni.request({
-					url: "http://localhost:8080/medal/hall?username=" + username,
+					url: config.resolveUrl('/medal/hall') + '?username=' + encodeURIComponent(username || ''),
 					method: "GET",
 					header: {
 						'Content-Type': 'application/json',
@@ -272,7 +273,7 @@
 				const token = uni.getStorageSync('community_token')
 				// 发送【根据ID查询用户】请求
 				uni.request({
-					url: "http://localhost:8080/user/info",
+					url: config.resolveUrl('/user/info'),
 					method: "GET",
 					header: {
 						'Content-Type': 'application/json',

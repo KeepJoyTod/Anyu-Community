@@ -1,72 +1,80 @@
 package com.ruoyi.web.controller.service;
 
 import com.ruoyi.common.Result;
+import com.ruoyi.domain.CommunityElectricityFee;
 import com.ruoyi.domain.ElectricityAccount;
+import com.ruoyi.mapper.CommunityElectricityFeeMapper;
 import com.ruoyi.service.ElectricityAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/electricity")
-@CrossOrigin // 允许跨域请求，方便前端测试
+@CrossOrigin
 public class ElectricityController {
 
     @Autowired
     private ElectricityAccountService electricityAccountService;
 
-    /**
-     * 获取余额
-     * 对应前端: GET /electricity/balance
-     */
+    @Autowired
+    private CommunityElectricityFeeMapper communityElectricityFeeMapper;
+
     @GetMapping("/balance")
     public Result<Map<String, Object>> getBalance() {
-        // 实际项目中 userId 从 Token 获取，这里模拟当前登录用户 userId = 1
         Long userId = 1L;
-
         ElectricityAccount account = electricityAccountService.getBalance(userId);
 
         Map<String, Object> data = new HashMap<>();
         data.put("balance", account.getBalance());
         data.put("electricityAmount", account.getElectricityAmount());
-
         return Result.success(data);
     }
 
-    /**
-     * 电费充值
-     * 对应前端: POST /electricity/recharge
-     */
     @PostMapping("/recharge")
     public Result<String> recharge(@RequestBody Map<String, Object> params) {
-        // 实际项目中 userId 从 Token 获取，这里模拟当前登录用户 userId = 1
         Long userId = 1L;
-
-        // 从 Map 中获取参数并进行基础校验
         if (params.get("amount") == null || params.get("payMethod") == null) {
-            return Result.error(400, "参数不完整");
+            return Result.error(400, "missing amount or payMethod");
         }
 
         BigDecimal amount;
         try {
             amount = new BigDecimal(params.get("amount").toString());
         } catch (NumberFormatException e) {
-            return Result.error(400, "金额格式不正确");
+            return Result.error(400, "invalid amount");
         }
 
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            return Result.error(400, "充值金额必须大于0");
+            return Result.error(400, "amount must be positive");
         }
 
-        String payMethod = params.get("payMethod").toString();
+        boolean success = electricityAccountService.recharge(userId, amount, params.get("payMethod").toString());
+        return success ? Result.success("success") : Result.error("recharge failed");
+    }
 
-        boolean success = electricityAccountService.recharge(userId, amount, payMethod);
-        if (success) {
-            return Result.success("充值成功");
+    @GetMapping("/bill/list")
+    public Result<List<CommunityElectricityFee>> getElectricityBillList() {
+        Long userId = 1L;
+        return Result.success(communityElectricityFeeMapper.selectByUserId(userId));
+    }
+
+    @GetMapping("/bill/detail/{electricityId}")
+    public Result<CommunityElectricityFee> getElectricityBillDetail(@PathVariable Long electricityId) {
+        CommunityElectricityFee electricityFee = communityElectricityFeeMapper.selectById(electricityId);
+        if (electricityFee == null) {
+            return Result.error(404, "electricity bill not found");
         }
-        return Result.error("充值失败");
+        return Result.success(electricityFee);
     }
 }

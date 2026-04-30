@@ -1,7 +1,7 @@
 // API 配置和调用函数
 
 // 后端基础地址
-const BASE_URL = 'http://127.0.0.1:8080';
+import config from './config'
 
 /**
  * 网络请求封装
@@ -13,7 +13,7 @@ function request(options) {
   
   return new Promise((resolve, reject) => {
     uni.request({
-      url: BASE_URL + options.url,
+      url: config.resolveUrl(options.url),
       method: options.method || 'GET',
       data: options.data || {},
       header: {

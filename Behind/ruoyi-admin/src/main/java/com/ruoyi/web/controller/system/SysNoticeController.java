@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -18,6 +19,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.SysNotice;
+import com.ruoyi.system.service.ISysNoticeReadService;
 import com.ruoyi.system.service.ISysNoticeService;
 
 /**
@@ -31,6 +33,9 @@ public class SysNoticeController extends BaseController
 {
     @Autowired
     private ISysNoticeService noticeService;
+
+    @Autowired
+    private ISysNoticeReadService noticeReadService;
 
     /**
      * 获取通知公告列表
@@ -52,6 +57,37 @@ public class SysNoticeController extends BaseController
     public AjaxResult getInfo(@PathVariable Long noticeId)
     {
         return success(noticeService.selectNoticeById(noticeId));
+    }
+
+    /**
+     * 获取顶部通知公告列表.
+     */
+    @GetMapping("/listTop")
+    public AjaxResult listTop()
+    {
+        Long userId = getUserId();
+        AjaxResult result = success(noticeReadService.selectNoticeListWithReadStatus(userId, 5));
+        return result.put("unreadCount", noticeReadService.selectUnreadCount(userId));
+    }
+
+    /**
+     * 标记通知公告已读.
+     */
+    @PostMapping("/markRead")
+    public AjaxResult markRead(@RequestParam Long noticeId)
+    {
+        noticeReadService.markRead(noticeId, getUserId());
+        return success();
+    }
+
+    /**
+     * 批量标记通知公告已读.
+     */
+    @PostMapping("/markReadAll")
+    public AjaxResult markReadAll(@RequestParam Long[] ids)
+    {
+        noticeReadService.markReadBatch(getUserId(), ids);
+        return success();
     }
 
     /**

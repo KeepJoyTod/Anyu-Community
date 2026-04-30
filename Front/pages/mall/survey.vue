@@ -76,6 +76,8 @@
 </template>
 
 <script>
+import config from '@/api/config.js'
+
 export default {
   data() {
     return {
@@ -147,7 +149,7 @@ export default {
 
         // 调用后端API提交调研数据
         const submitRes = await this.request({
-          url: 'http://127.0.0.1:8080/community/survey/submit',
+          url: config.resolveUrl('/community/survey/submit'),
           method: 'POST',
           header: {
             'Authorization': 'Bearer ' + token,
@@ -168,7 +170,7 @@ export default {
 
         // 完成调研任务
         const taskRes = await this.request({
-          url: 'http://127.0.0.1:8080/community/task/complete/survey',
+          url: config.resolveUrl('/community/task/complete/survey'),
           method: 'POST',
           header: {
             'Authorization': 'Bearer ' + token

@@ -118,7 +118,27 @@ public class PackageController {
         m.put("pickupCode", e.getPickupCode());
         m.put("trackingNo", e.getTrackingNo());
         m.put("arrivalTime", e.getArrivalTime() != null ? e.getArrivalTime().format(fmt) : null);
-        m.put("status", e.getStatus());
+        m.put("status", toMiniStatus(e.getStatus()));
+        m.put("statusCode", e.getStatus());
         return m;
+    }
+
+    private String toMiniStatus(Integer status) {
+        if (status == null) {
+            return "pending";
+        }
+        switch (status) {
+            case 3:
+                return "picked";
+            case 1:
+                return "delivering";
+            case 0:
+                return "in_transit";
+            case 4:
+                return "exception";
+            case 2:
+            default:
+                return "pending";
+        }
     }
 }

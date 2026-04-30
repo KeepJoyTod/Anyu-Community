@@ -25,7 +25,11 @@ public interface ICommunityWaterFeeService {
 
     List<CommunityWaterFee> selectCommunityWaterFeeList();
 
+    List<CommunityWaterFee> selectCommunityWaterFeeList(CommunityWaterFee communityWaterFee);
+
     int updateCommunityWaterFee(CommunityWaterFee communityWaterFee);
 
     int insertCommunityWaterFee(CommunityWaterFee communityWaterFee);
+
+    int deleteCommunityWaterFeeByIds(Long[] waterIds);
 }

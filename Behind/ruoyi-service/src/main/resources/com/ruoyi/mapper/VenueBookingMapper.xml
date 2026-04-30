@@ -45,6 +45,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by create_time desc
     </select>
 
+    <select id="selectListByQuery" parameterType="com.ruoyi.domain.VenueBooking" resultMap="VenueBookingResult">
+        select reservation_id, space_name, user_id, user_name, user_phone,
+               reserve_date, start_time, end_time, reservation_purpose,
+               reservation_status, reject_reason, approver_id, approve_time,
+               create_time, update_time, remark
+        from venue_booking
+        <where>
+            <if test="id != null">and reservation_id = #{id}</if>
+            <if test="spaceName != null and spaceName != ''">and space_name like concat('%', #{spaceName}, '%')</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="userName != null and userName != ''">and user_name like concat('%', #{userName}, '%')</if>
+            <if test="userPhone != null and userPhone != ''">and user_phone = #{userPhone}</if>
+            <if test="reserveDate != null">and reserve_date = #{reserveDate}</if>
+            <if test="status != null and status != ''">and reservation_status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+
     <!-- 根据userId查询场地预约列表 -->
     <select id="selectByUserId" parameterType="java.lang.Long" resultMap="VenueBookingResult">
         select reservation_id, space_name, user_id, user_name, user_phone, 
@@ -65,5 +83,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from venue_booking
         where reservation_id = #{id}
     </select>
+
+    <update id="updateById" parameterType="com.ruoyi.domain.VenueBooking">
+        update venue_booking
+        <set>
+            <if test="spaceName != null">space_name = #{spaceName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="userPhone != null">user_phone = #{userPhone},</if>
+            <if test="reserveDate != null">reserve_date = #{reserveDate},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="reservationPurpose != null">reservation_purpose = #{reservationPurpose},</if>
+            <if test="status != null">reservation_status = #{status},</if>
+            <if test="rejectReason != null">reject_reason = #{rejectReason},</if>
+            <if test="approverId != null">approver_id = #{approverId},</if>
+            <if test="approveTime != null">approve_time = #{approveTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where reservation_id = #{id}
+    </update>
+
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from venue_booking where reservation_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 </mapper>

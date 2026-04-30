@@ -1,7 +1,9 @@
 package com.ruoyi.service.impl;
 
+import com.ruoyi.domain.CommunityWaterFee;
 import com.ruoyi.domain.WaterAccount;
 import com.ruoyi.domain.WaterRechargeRecord;
+import com.ruoyi.mapper.CommunityWaterFeeMapper;
 import com.ruoyi.mapper.WaterAccountMapper;
 import com.ruoyi.mapper.WaterRechargeRecordMapper;
 import com.ruoyi.service.WaterAccountService;
@@ -11,7 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Service
 public class WaterAccountServiceImpl implements WaterAccountService {
@@ -20,6 +25,8 @@ public class WaterAccountServiceImpl implements WaterAccountService {
     private WaterRechargeRecordMapper rechargeRecordMapper;
     @Autowired
     private WaterAccountMapper waterAccountMapper;
+    @Autowired
+    private CommunityWaterFeeMapper communityWaterFeeMapper;
     // 假设水费单价为 2.5元/吨
     private static final BigDecimal WATER_PRICE_PER_TON = new BigDecimal("2.50");
 
@@ -63,6 +70,36 @@ public class WaterAccountServiceImpl implements WaterAccountService {
         account.setWaterAmount(account.getWaterAmount().add(waterAdded));
         account.setUpdateTime(LocalDateTime.now());
 
-        return waterAccountMapper.updateById(account) > 0;
+        boolean updated = waterAccountMapper.updateById(account) > 0;
+        if (updated) {
+            savePaidFeeRecord(userId, amount, waterAdded, payMethod, account);
+        }
+        return updated;
+    }
+
+    private void savePaidFeeRecord(Long userId, BigDecimal amount, BigDecimal waterAdded, String payMethod, WaterAccount account) {
+        LocalDateTime now = LocalDateTime.now();
+        CommunityWaterFee fee = new CommunityWaterFee();
+        fee.setUserId(userId);
+        fee.setUserName("user-" + userId);
+        fee.setUserRoom(String.valueOf(userId));
+        fee.setReadMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")));
+        fee.setLastReading(BigDecimal.ZERO);
+        fee.setCurrentReading(waterAdded);
+        fee.setUsedAmount(waterAdded);
+        fee.setUnitPrice(WATER_PRICE_PER_TON);
+        fee.setTotalFee(amount);
+        fee.setBalance(account.getBalance());
+        fee.setFeeStatus("paid");
+        fee.setDueDate(now);
+        fee.setPaymentTime(now);
+        fee.setPaymentNo("W" + UUID.randomUUID().toString().replace("-", ""));
+        fee.setOverdueAmount(BigDecimal.ZERO);
+        fee.setReader("system");
+        fee.setReadTime(now);
+        fee.setCreateTime(now);
+        fee.setUpdateTime(now);
+        fee.setRemark("recharge:" + payMethod);
+        communityWaterFeeMapper.insertCommunityWaterFee(fee);
     }
 }

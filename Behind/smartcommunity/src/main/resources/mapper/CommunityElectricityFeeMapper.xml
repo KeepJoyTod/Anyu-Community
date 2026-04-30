@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.mapper.CommunityElectricityFeeMapper">
+    <select id="selectCommunityElectricityFeeList" parameterType="com.ruoyi.domain.CommunityElectricityFee" resultType="com.ruoyi.domain.CommunityElectricityFee">
+        SELECT * FROM community_electricity_fee
+        <where>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="userName != null and userName != ''">and user_name like concat('%', #{userName}, '%')</if>
+            <if test="userRoom != null and userRoom != ''">and user_room like concat('%', #{userRoom}, '%')</if>
+            <if test="readMonth != null and readMonth != ''">and read_month = #{readMonth}</if>
+            <if test="feeStatus != null and feeStatus != ''">and fee_status = #{feeStatus}</if>
+            <if test="paymentNo != null and paymentNo != ''">and payment_no = #{paymentNo}</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
 
     <select id="selectByUserId" resultType="com.ruoyi.domain.CommunityElectricityFee">
-        SELECT * FROM community_electricity_fee WHERE user_id = 1 ORDER BY create_time DESC
+        SELECT * FROM community_electricity_fee WHERE user_id = #{userId} ORDER BY create_time DESC
     </select>
 
     <select id="selectByFeeStatus" resultType="com.ruoyi.domain.CommunityElectricityFee">
@@ -15,7 +27,7 @@
     </select>
 
     <select id="selectById" parameterType="java.lang.Long" resultType="com.ruoyi.domain.CommunityElectricityFee">
-        SELECT * FROM community_electricity_fee WHERE electricity_id = 1
+        SELECT * FROM community_electricity_fee WHERE electricity_id = #{electricityId}
     </select>
 
     <update id="updateById" parameterType="com.ruoyi.domain.CommunityElectricityFee">
@@ -41,7 +53,7 @@
             read_time = COALESCE(#{readTime}, read_time),
             update_time = COALESCE(#{updateTime}, update_time),
             remark = COALESCE(#{remark}, remark)
-        WHERE electricity_id = 1
+        WHERE electricity_id = #{electricityId}
     </update>
 
     <insert id="insert" parameterType="com.ruoyi.domain.CommunityElectricityFee" useGeneratedKeys="true" keyProperty="electricityId">
@@ -57,5 +69,12 @@
             #{createTime}, #{updateTime}, #{remark}
         )
     </insert>
+
+    <delete id="deleteCommunityElectricityFeeByIds" parameterType="java.lang.Long">
+        DELETE FROM community_electricity_fee WHERE electricity_id in
+        <foreach item="electricityId" collection="array" open="(" separator="," close=")">
+            #{electricityId}
+        </foreach>
+    </delete>
 
 </mapper>

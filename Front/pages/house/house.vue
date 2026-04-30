@@ -117,6 +117,8 @@
 </template>
 
 <script>
+import config from '@/api/config.js'
+
 export default {
   data() {
     return {
@@ -141,7 +143,7 @@ export default {
       uni.showLoading({ title: '加载中...' });
 
       uni.request({
-        url: 'http://localhost:8080/user/house?username=' + username,
+        url: config.resolveUrl('/user/house') + '?username=' + encodeURIComponent(username || ''),
         method: 'GET',
         // 修复 1：header 配置规范，且移除可能导致的跨域或验证失败配置
         header: {

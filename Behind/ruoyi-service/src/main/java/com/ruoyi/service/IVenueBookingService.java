@@ -35,10 +35,34 @@ public interface IVenueBookingService
     List<VenueBooking> listBookings();
 
     /**
+     * 按条件查询场地预约列表
+     *
+     * @param venueBooking 查询条件
+     * @return 预约列表
+     */
+    List<VenueBooking> listBookings(VenueBooking venueBooking);
+
+    /**
      * 根据ID获取场地预约详情
      * 
      * @param id 预约ID
      * @return 预约详情
      */
     VenueBooking getBookingById(Long id);
+
+    /**
+     * 修改场地预约
+     *
+     * @param venueBooking 预约信息
+     * @return 结果
+     */
+    int updateBooking(VenueBooking venueBooking);
+
+    /**
+     * 批量删除场地预约
+     *
+     * @param ids 预约ID数组
+     * @return 结果
+     */
+    int deleteBookingsByIds(Long[] ids);
 }

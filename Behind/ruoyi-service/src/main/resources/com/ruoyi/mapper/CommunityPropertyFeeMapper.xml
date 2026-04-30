@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.mapper.CommunityPropertyFeeMapper">
+    <resultMap id="CommunityPropertyFeeResult" type="com.ruoyi.domain.CommunityPropertyFee">
+        <id property="propertyFeeId" column="property_fee_id" />
+        <result property="userId" column="user_id" />
+        <result property="userName" column="user_name" />
+        <result property="userRoom" column="user_room" />
+        <result property="propertyMonth" column="property_month" />
+        <result property="houseArea" column="house_area" />
+        <result property="unitPrice" column="unit_price" />
+        <result property="totalFee" column="total_fee" />
+        <result property="feeStatus" column="fee_status" />
+        <result property="dueDate" column="due_date" />
+        <result property="paymentTime" column="payment_time" />
+        <result property="paymentNo" column="payment_no" />
+        <result property="overdueAmount" column="overdue_amount" />
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
+    </resultMap>
+
+    <sql id="selectCommunityPropertyFeeVo">
+        select property_fee_id, user_id, user_name, user_room, property_month,
+               house_area, unit_price, total_fee, fee_status, due_date,
+               payment_time, payment_no, overdue_amount, create_time, update_time, remark
+        from community_property_fee
+    </sql>
+
+    <select id="selectCommunityPropertyFeeList" parameterType="com.ruoyi.domain.CommunityPropertyFee" resultMap="CommunityPropertyFeeResult">
+        <include refid="selectCommunityPropertyFeeVo" />
+        <where>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="userName != null and userName != ''">and user_name like concat('%', #{userName}, '%')</if>
+            <if test="userRoom != null and userRoom != ''">and user_room like concat('%', #{userRoom}, '%')</if>
+            <if test="propertyMonth != null and propertyMonth != ''">and property_month = #{propertyMonth}</if>
+            <if test="feeStatus != null and feeStatus != ''">and fee_status = #{feeStatus}</if>
+            <if test="paymentNo != null and paymentNo != ''">and payment_no = #{paymentNo}</if>
+        </where>
+        order by due_date desc, create_time desc
+    </select>
+
+    <select id="selectCommunityPropertyFeeById" parameterType="java.lang.Long" resultMap="CommunityPropertyFeeResult">
+        <include refid="selectCommunityPropertyFeeVo" /> where property_fee_id = #{propertyFeeId}
+    </select>
+
+    <insert id="insertCommunityPropertyFee" parameterType="com.ruoyi.domain.CommunityPropertyFee" useGeneratedKeys="true" keyProperty="propertyFeeId">
+        insert into community_property_fee (
+            user_id, user_name, user_room, property_month, house_area, unit_price,
+            total_fee, fee_status, due_date, payment_time, payment_no, overdue_amount,
+            create_time, update_time, remark
+        ) values (
+            #{userId}, #{userName}, #{userRoom}, #{propertyMonth}, #{houseArea}, #{unitPrice},
+            #{totalFee}, #{feeStatus}, #{dueDate}, #{paymentTime}, #{paymentNo}, #{overdueAmount},
+            #{createTime}, #{updateTime}, #{remark}
+        )
+    </insert>
+
+    <update id="updateCommunityPropertyFee" parameterType="com.ruoyi.domain.CommunityPropertyFee">
+        update community_property_fee
+        <set>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="userRoom != null">user_room = #{userRoom},</if>
+            <if test="propertyMonth != null">property_month = #{propertyMonth},</if>
+            <if test="houseArea != null">house_area = #{houseArea},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="totalFee != null">total_fee = #{totalFee},</if>
+            <if test="feeStatus != null">fee_status = #{feeStatus},</if>
+            <if test="dueDate != null">due_date = #{dueDate},</if>
+            <if test="paymentTime != null">payment_time = #{paymentTime},</if>
+            <if test="paymentNo != null">payment_no = #{paymentNo},</if>
+            <if test="overdueAmount != null">overdue_amount = #{overdueAmount},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        where property_fee_id = #{propertyFeeId}
+    </update>
+
+    <delete id="deleteCommunityPropertyFeeByIds" parameterType="java.lang.Long">
+        delete from community_property_fee where property_fee_id in
+        <foreach item="propertyFeeId" collection="array" open="(" separator="," close=")">
+            #{propertyFeeId}
+        </foreach>
+    </delete>
+</mapper>
